@@ -3,7 +3,7 @@ package com.dc.ehs.domain;
 import java.util.Date;
 
 public class User
-{
+{    
 	int userID;
 	String userName;
 	String userPasswd;
