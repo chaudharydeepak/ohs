@@ -217,3 +217,5 @@ where o.initiatedby = u.username
 select o.*, u.first_name, u.last_name from app.ObservationMaster o, app.EHS_SECURITY_USERPROFILE u where o.initiatedby = u.username and o.active = true
 
 update "APP"."EHS_SECURITY_USERPROFILE" set password = '$2a$10$vHVPkHxxFTyB/sXOUBuhaOH5gRqA/ZZ0aW3VK7fK0yvZBRGkvKigG' where username = 'chaudharydeepak08@gmail.com'
+
+select * from "APP"."EHS_SECURITY_USERPROFILE"
