@@ -63,7 +63,7 @@ true);
 update app.EHS_SECURITY_USERAUTHORITY set role = 'ROLE_ADMIN' where username = 'chaudharydeepak08@gmail.com'
 
 insert into app.EHS_SECURITY_USERAUTHORITY values (
-'chaudharydeepak08@gmail.com',
+'adminuser@email.com',
 'ROLE_ADMIN');
 
 insert into app.EHS_SECURITY_USERAUTHORITY values (
@@ -206,6 +206,8 @@ insert into app.EHS_SECURITY_USERAUTHORITY values (
 
 
 select * from app.EHS_SECURITY_USERPROFILE
+
+select * from app.EHS_SECURITY_USERAUTHORITY
 
 Select * from app.EHS_SECURITY_USERPROFILE u, app.EHS_SECURITY_USERAUTHORITY a where u.username = a.username
 
