@@ -1,5 +1,6 @@
 package com.dc.ehs.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -17,7 +18,7 @@ public class ObservationCRUDServiceImpl implements ObservationCRUDService
 	@Autowired
 	ObservationCRUDDAO obsCRUDdao;
 	
-	public int saveObservation(Observation observation) throws MessagingException
+	public int saveObservation(Observation observation) throws MessagingException, ParseException
 	{
 		
 		return obsCRUDdao.saveObservation(observation);
@@ -37,6 +38,11 @@ public class ObservationCRUDServiceImpl implements ObservationCRUDService
 	public String setStatusOnObservation( int observationId, String status, String user)
 	{
 		return obsCRUDdao.setStatusOnObservation(observationId, status, user);
+	}
+	
+	public String deleteObservation( int obsId, String mdfdby )
+	{
+		return obsCRUDdao.deleteObservation( obsId, mdfdby );
 	}
 
 }

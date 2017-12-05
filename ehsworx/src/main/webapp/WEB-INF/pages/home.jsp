@@ -17,13 +17,13 @@
 
 <body style="font-family: 'Open Sans', sans-serif;padding-top: 70px;">	
 <%@include file="header.jsp" %>
-<table class="table" align="center" style="width:80%">
+<table class="table table-bordered table-striped" align="center" style="width:90%">
 		<thead>
 			<tr>
 				<th>Observation ID</th>
+				<th>Type of Observation</th>
 				<th>Initiated By</th>
 				<th>Responsible Manager</th>
-				<th>Active</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
@@ -33,13 +33,13 @@
 			<c:forEach items="${observationList}" var="obs">
 				<tr>
 					<td>${obs.obsID}</td>
-					<td>${obs.initiatedby}</td>
+					<td>${obs.shoc}</td>
+					<td>${obs.initrFname} ${obs.initrLname}</td>
 					<td>${obs.responsibleManager}</td>
-					<td>${obs.active}</td>
 					<td>${obs.status}</td>
 					<td><a href="<c:url value="/welcome/admin/loadObs?name="/>${obs.obsID}">
 						<i class="fa fa-edit" style="color:red"></i></a>
-						<i class="fa fa-remove" style="color:red"></i>
+						<a id="deleteObs_${obs.obsID}" href="#"><i class="fa fa-remove" style="color:red"></i></a>
 						<a href="<c:url value="/welcome/action?name="/>${obs.obsID}">
 						<i class="fa fa-cogs" style="color:red"></i></a>
 						</td> 
@@ -51,6 +51,20 @@
 <script type="text/javascript">
 $( document ).ready(function() {
 	$('#mo').addClass('active');
+	$("[id^=deleteObs_]").click(function(){
+	 $.ajax({
+		method: "POST",
+		url: "/ehsworx/welcome/deleteObs?obsId=" + $(this).attr("id") + "&${_csrf.parameterName}=${_csrf.token}",
+		success: function(result)
+		{
+			window.location.reload();;
+		},
+		failure: function(result)
+		{
+			alert(result);
+		}
+		});
+	});
 });
 </script>
 </html>

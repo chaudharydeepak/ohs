@@ -1,6 +1,7 @@
 package com.dc.ehs.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +27,11 @@ import com.dc.ehs.entity.Actions;
 import com.dc.ehs.entity.Observation;
 import com.dc.ehs.helper.EhsHelper;
 
+/**
+ * 
+ * @author Deepak Chaudhary
+ *
+ */
 @Controller
 @RequestMapping( "/welcome" )
 public class ApplicationController
@@ -35,7 +42,23 @@ public class ApplicationController
 	
 	private static final Logger	LOGGER	= Logger.getLogger( ApplicationController.class );
 	
+	
 	@RequestMapping( method = RequestMethod.GET )
+	public String loadLanding ( ModelMap model )
+	{
+		
+		LOGGER.info( "invoked loadHome " );
+		/* return doc search view */
+		//model.addAttribute( "observationList", ehsHelper.loadAllObservations( ) );
+		return "landing";
+	}
+	
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping( value = "/mgobs", method = RequestMethod.GET )
 	public String loadHome ( ModelMap model )
 	{
 		
@@ -45,6 +68,13 @@ public class ApplicationController
 		return "home";
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @param observation
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping( value = "/actionobs", method = RequestMethod.POST, params =
 	{ "assigned" } )
 	public ModelAndView approve ( ModelMap model, Observation observation ) throws IOException
@@ -54,6 +84,13 @@ public class ApplicationController
 		return new ModelAndView( "redirect:/welcome/action?name=" + observation.getObsID( ) );
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @param observation
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping( value = "/actionobs", method = RequestMethod.POST, params =
 	{ "inprogress" } )
 	public ModelAndView deny ( ModelMap model, Observation observation ) throws IOException
@@ -63,6 +100,12 @@ public class ApplicationController
 		return new ModelAndView( "redirect:/welcome/action?name=" + observation.getObsID( ) );
 	}
 	
+	/**
+	 * 
+	 * @param obsId
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping( value = "/action", method = RequestMethod.GET )
 	public String loadActionOnObservation ( @RequestParam( "name" ) String obsId, ModelMap model )
 	{
@@ -93,6 +136,11 @@ public class ApplicationController
 		return "observation_action";
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping( value = "/admin", method = RequestMethod.GET )
 	public String loadObservation ( ModelMap model )
 	{
@@ -115,9 +163,18 @@ public class ApplicationController
 		return "admin/observation";
 	}
 	
+	/**
+	 * 
+	 * @param observation
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 * @throws MessagingException
+	 * @throws ParseException
+	 */
 	@RequestMapping( value = "/admin/createobs", method = RequestMethod.POST )
 	public ModelAndView createObservation ( Observation observation, ModelMap model )
-	        throws IOException, MessagingException
+	        throws IOException, MessagingException, ParseException
 	{
 		LOGGER.info( "invoked createObservation " + observation );
 		
@@ -125,15 +182,13 @@ public class ApplicationController
 		{
 			LOGGER.info( " Requested operation -- " + observation.getOperationType( ) );
 		}
-		/* return doc search view */
+		
+		LOGGER.info( " -- " + observation.getDate( ) );
 		
 		int obsId = ehsHelper.saveObservation( observation );
 		
 		LOGGER.info( "successfully" + observation.getOperationType( ) + " observation with ID " + obsId );
 		
-		/* send email */
-		// ehsHelper.sendEhsNotification(String.valueOf(obsId),
-		// observation.getResponsibleManager());
 		/* now lest load all observations */
 		if ( observation.getOperationType( ).equalsIgnoreCase( "new" ) )
 		{
@@ -145,6 +200,13 @@ public class ApplicationController
 		}
 	}
 	
+	/**
+	 * 
+	 * @param obsId
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping( value = "/admin/loadObs", method = RequestMethod.GET )
 	public String loadbservation ( @RequestParam( "name" ) String obsId, ModelMap model ) throws IOException
 	{
@@ -177,9 +239,18 @@ public class ApplicationController
 		return "admin/observation_edit";
 	}
 	
+	/**
+	 * 
+	 * @param observation
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 * @throws MessagingException
+	 * @throws ParseException
+	 */
 	@RequestMapping( value = "/admin/editobs", method = RequestMethod.POST )
 	public ModelAndView editObservation ( Observation observation, ModelMap model )
-	        throws IOException, MessagingException
+	        throws IOException, MessagingException, ParseException
 	{
 		LOGGER.info( "invoked createObservation " + observation );
 		
@@ -219,6 +290,11 @@ public class ApplicationController
 		}
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping( value = "/admin/manageuser", method = RequestMethod.GET )
 	public String loadUser ( ModelMap model )
 	{
@@ -228,6 +304,13 @@ public class ApplicationController
 		return "admin/manageuser";
 	}
 	
+	/**
+	 * 
+	 * @param formParams
+	 * @param type
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/saveUser", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > saveUser ( @RequestBody MultiValueMap< String, String > formParams,
 	        @RequestParam( value = "type", required = true ) String type )
@@ -265,6 +348,12 @@ public class ApplicationController
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
 	
+	/**
+	 * 
+	 * @param formParams
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/createUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > createUser ( @RequestBody MultiValueMap< String, String > formParams )
 	{
@@ -287,6 +376,12 @@ public class ApplicationController
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
 	
+	/**
+	 * 
+	 * @param users
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/deleteUser", method = RequestMethod.POST )
 	public ResponseEntity< String > deleteUser ( @RequestParam( value = "users", required = true ) String users )
 	{
@@ -304,6 +399,11 @@ public class ApplicationController
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping( value = "/admin/managmtdt", method = RequestMethod.GET )
 	public String loadMetadata ( ModelMap model )
 	{
@@ -311,6 +411,12 @@ public class ApplicationController
 		return "admin/managemetadata";
 	}
 	
+	/**
+	 * 
+	 * @param formParams
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/saveMetaData", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > saveMetaData ( @RequestBody MultiValueMap< String, String > formParams )
 	{
@@ -342,33 +448,70 @@ public class ApplicationController
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
 	
+	/**
+	 * 
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/createMetaData", method = RequestMethod.POST )
-	public ResponseEntity< String > createMetaData ( @RequestParam( value = "value", required = true ) String value , @RequestParam( value = "type", required = true ) String type )
+	public ResponseEntity< String > createMetaData ( @RequestParam( value = "value", required = true ) String value,
+	        @RequestParam( value = "type", required = true ) String type )
 	{
 		LOGGER.info( "invoked createUser : " );
 		System.out.println( "form params received: " + value + " : " + type );
 		HttpHeaders responseHeaders = new HttpHeaders( );
 		try
 		{
-			ehsHelper.createMetaData(type, value);
+			ehsHelper.createMetaData( type, value );
 		}
 		catch ( Exception e )
 		{
-			return new ResponseEntity< String >( e.getMessage( ), responseHeaders,
-			        HttpStatus.INTERNAL_SERVER_ERROR );
+			return new ResponseEntity< String >( e.getMessage( ), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR );
 		}
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
 	
+	/**
+	 * 
+	 * @param metadata
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
 	@RequestMapping( value = "/deleteMetaData", method = RequestMethod.POST )
-	public ResponseEntity< String > deleteMetaData ( @RequestParam( value = "metadata", required = true ) String metadata )
+	public ResponseEntity< String > deleteMetaData (
+	        @RequestParam( value = "metadata", required = true ) String metadata )
 	{
 		LOGGER.info( "invoked deleteMetaData : " );
 		System.out.println( "params received: " + metadata );
 		HttpHeaders responseHeaders = new HttpHeaders( );
 		try
 		{
-			ehsHelper.deleteMetaData(metadata);
+			ehsHelper.deleteMetaData( metadata );
+		}
+		catch ( Exception e )
+		{
+			return new ResponseEntity< String >( e.getMessage( ), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR );
+		}
+		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
+	}
+	
+	/**
+	 * 
+	 * @param metadata
+	 * @return
+	 */
+	@Secured(value = {"ROLE_ADMIN"})
+	@RequestMapping( value = "/deleteObs", method = RequestMethod.POST )
+	public ResponseEntity< String > deleteObs ( @RequestParam( value = "obsId", required = true ) String obsId )
+	{
+		LOGGER.info( "invoked deleteObs : " );
+		System.out.println( "params received: " + obsId );
+		HttpHeaders responseHeaders = new HttpHeaders( );
+		try
+		{
+			ehsHelper.deleteObservation( Integer.valueOf( obsId.split( "_" )[ 1 ] ) );
 		}
 		catch ( Exception e )
 		{

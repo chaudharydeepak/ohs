@@ -10,9 +10,9 @@
 </head>
 <body>
 	<div class="wrapper">
+		
 		<form action="j_spring_security_check" method="post" class="form-signin">
-			<h2 class="form-signin-heading">EHS Login</h2>
-			<br>
+			<p style="text-align:center"><img style="text-align:center;" src="<c:url value='/resources/img/logo.gif' />"></img></p>
 			<c:if test="${not empty error}">
 				<div class="alert alert-danger">${error}</div>
 			</c:if>
@@ -25,7 +25,7 @@
 				placeholder="Password" />
 			<br> 
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+			<button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color:green;">Login</button>
 		</form>
 	</div>
 </body>

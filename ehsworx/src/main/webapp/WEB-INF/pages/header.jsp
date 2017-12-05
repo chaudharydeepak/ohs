@@ -4,7 +4,7 @@
         		<span class="navbar-toggler-icon"></span>
       	</button>
       	<img src="<c:url value='/resources/img/OHS-Icons-01.png' />"></img>&nbsp;
-      	<a class="navbar-brand" href="#" style="color:#2ECC71;">EHS</a>
+      	<a class="navbar-brand" href="/ehsworx/welcome" style="color:#2ECC71;">OHSE</a>
     
       	<div class="collapse navbar-collapse" id="navbarSupportedContent">
         		<ul class="navbar-nav mr-auto">
@@ -12,7 +12,7 @@
                   	<a class="nav-link" href="/ehsworx/welcome/admin">Create Observation<span class="sr-only">(current)</span></a>
           		</li>
           		<li class="nav-item" id="mo" name="mo">
-        				<a class="nav-link" href="/ehsworx/welcome">Manage Observation<span class="sr-only">(current)</span></a>
+        				<a class="nav-link" href="/ehsworx/welcome/mgobs">Manage Observation<span class="sr-only">(current)</span></a>
           		</li>
           		<li class="nav-item" id="mm" name="mm">
                   	<a class="nav-link" href="/ehsworx/welcome/admin/managmtdt">Manage Metadata<span class="sr-only">(current)</span></a>

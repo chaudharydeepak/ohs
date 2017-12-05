@@ -1,5 +1,6 @@
 package com.dc.ehs.dao;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -15,7 +16,7 @@ public interface ObservationCRUDDAO
 	 */
 	public void setDataSource ( DataSource dataSource );
 	
-    public int saveObservation( Observation observation) throws MessagingException;
+    public int saveObservation( Observation observation) throws MessagingException, ParseException;
 	
 	public Observation loadObservation( int observationId );
 	
@@ -23,4 +24,5 @@ public interface ObservationCRUDDAO
 	
 	public String setStatusOnObservation( int observationId, String status, String user);
 	
+	public String deleteObservation( int obsId, String mdfdby );
 }

@@ -2,6 +2,8 @@ package com.dc.ehs.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +40,9 @@ public class EhsHelper
 	@Autowired
 	EmailService					emailService;
 	
+	@Autowired
+	BCryptPasswordEncoder			encoder;
+	
 	private static final Logger		LOGGER	= Logger.getLogger( EhsHelper.class );
 	
 	public List< User > loadAllUsers ( String userName )
@@ -57,7 +63,7 @@ public class EhsHelper
 		return loadmetaDataService.loadMetaDataForEdit( );
 	}
 	
-	public String saveMetaData( int id , String metaType, String metaValue)
+	public String saveMetaData ( int id, String metaType, String metaValue )
 	{
 		return loadmetaDataService.saveMetaData( id, metaType, metaValue );
 	}
@@ -69,23 +75,12 @@ public class EhsHelper
 	
 	public String deleteMetaData ( String metaData )
 	{
-		String modfdBy = "";
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
-		{
-			modfdBy = authentication.getName( );
-		}
-		
-		return loadmetaDataService.deleteMetaData(metaData, modfdBy);
+		return loadmetaDataService.deleteMetaData( metaData, getLoggedInUser( ) );
 	}
 	
-	public int saveObservation ( Observation observation ) throws IOException, MessagingException
+	public int saveObservation ( Observation observation ) throws IOException, MessagingException, ParseException
 	{
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
-		{
-			observation.setInitiatedby( authentication.getName( ) );
-		}
+		observation.setInitiatedby( getLoggedInUser( ) );
 		/* lets upload file first */
 		MultipartFile multipartFile = observation.getFile( );
 		
@@ -102,14 +97,7 @@ public class EhsHelper
 	
 	public List< Observation > loadAllObservations ( )
 	{
-		String username = "";
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
-		{
-			username = authentication.getName( );
-		}
-		
-		return obsCRUDService.loadAllObservations( username );
+		return obsCRUDService.loadAllObservations( getLoggedInUser( ) );
 	}
 	
 	public Observation loadObservation ( String obs_id )
@@ -119,13 +107,7 @@ public class EhsHelper
 	
 	public String setStatus ( int obsId, String status )
 	{
-		String username = "";
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
-		{
-			username = authentication.getName( );
-		}
-		return obsCRUDService.setStatusOnObservation( obsId, status, username );
+		return obsCRUDService.setStatusOnObservation( obsId, status, getLoggedInUser( ) );
 	}
 	
 	public String sendEhsNotification ( String obsID, String recp ) throws MessagingException
@@ -142,37 +124,38 @@ public class EhsHelper
 	
 	public String saveUser ( String username, String key, String value )
 	{
-		String modfdBy = "";
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
+		if ( key.equalsIgnoreCase( "pswd" ) )
 		{
-			modfdBy = authentication.getName( );
+			value = encoder.encode( value );
 		}
-		return manageUserService.saveUser( username, key, value, modfdBy );
+		return manageUserService.saveUser( username, key, value, getLoggedInUser( ) );
 	}
 	
 	public String createUser ( String username, String password, String role, String firstname, String lastname )
 	{
-		String modfdBy = "";
-		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
-		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
-		{
-			modfdBy = authentication.getName( );
-		}
-		return manageUserService.createUser( username, password, firstname, lastname, role, modfdBy );
+		return manageUserService.createUser( username, encoder.encode( password ), firstname, lastname, role,
+		        getLoggedInUser( ) );
 	}
 	
 	public String deletUser ( String userList )
 	{
-		String modfdBy = "";
+		return manageUserService.deleteUser( userList, getLoggedInUser( ) );
+	}
+	
+	public String deleteObservation ( int obsId )
+	{
+		return obsCRUDService.deleteObservation( obsId, getLoggedInUser( ) );
+	}
+	
+	public String getLoggedInUser ( )
+	{
+		String currentAuthUser = "";
 		Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
 		if ( ! ( authentication instanceof AnonymousAuthenticationToken ) )
 		{
-			modfdBy = authentication.getName( );
+			currentAuthUser = authentication.getName( );
 		}
-		return manageUserService.deleteUser( userList, modfdBy );
+		return currentAuthUser;
 	}
-	
-	
 	
 }
