@@ -1,5 +1,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
@@ -7,7 +7,9 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/aop 
-    	http://www.springframework.org/schema/aop/spring-aop.xsd">
+    		http://www.springframework.org/schema/aop/spring-aop.xsd
+    		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- applicationContext should contain [global] configs except Spring MVC. -->
 
@@ -17,24 +19,41 @@
 	<context:component-scan base-package="com.dc.ehs.helper" />
 	<context:component-scan base-package="com.dc.ehs.service" />
 	<context:component-scan base-package="com.dc.ehs.dao" />
+	
+	<tx:annotation-driven transaction-manager="txManager"/><!-- a PlatformTransactionManager is still required -->
 
-		<!-- Initialization for data source. -->
+	<!-- Initialization for data source. -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="org.apache.derby.jdbc.ClientDriver" />
-		<!-- PRD -->  
+		<!-- PRD -->
 		<property name="jdbcUrl" value="jdbc:derby://localhost:1527/EHSPRD" />
 		<property name="user" value="ehsprd" />
 		<property name="password" value="Spring2017$" />
-		
+
 		<property name="initialPoolSize">
 			<value>8</value>
 		</property>
-	</bean>	
-	
+	</bean>
+
+
 	<!-- Initialize AppMetaDataService. -->
 	<bean id="ehsHelper" class="com.dc.ehs.helper.EhsHelper" />
-	
+
 	<bean id="manageUserService" class="com.dc.ehs.service.ManageUserServiceImpl" />
-	
+
 	<bean id="manageUserDAO" class="com.dc.ehs.dao.ManageUserDAOImpl" />
+
+	<bean id="loadmetaDataService" class="com.dc.ehs.service.LoadObservationMetadataServiceImpl" />
+
+	<bean id="loadMetadao" class="com.dc.ehs.dao.LoadMetadataDAOImpl" />
+
+	<bean id="obsCRUDService" class="com.dc.ehs.service.ObservationCRUDServiceImpl" />
+
+	<bean id="obsCRUDdao" class="com.dc.ehs.dao.ObservationCRUDDAOImpl" />
+	
+	 <!-- enable the configuration of transactional behavior based on annotations -->
+    
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 </beans>

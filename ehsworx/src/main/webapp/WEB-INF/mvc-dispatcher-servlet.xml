@@ -1,18 +1,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		">
 
 	<!-- mvc-dispatcher-servlet should contain configs relevant to Spring MVC. -->
 
 	<!-- Force both annotation / mvc resources mappings. -->
 	<mvc:annotation-driven />
+	
 
 	<!-- Base Scan. -->
 	<context:component-scan base-package="com.dc.ehs.controller" />
@@ -30,17 +32,19 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-	
+
 
 	<!-- Resolver for uploading files. -->
 	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSizePerFile" value="5242880" />
+	</bean>
 
 	<!-- Static resources / assets location. -->
 	<mvc:resources mapping="/resources/**" location="/resources/web_theme/" />
 	<mvc:resources mapping="/static/**" location="/resources/apidocs/" />
-	
-	
-	
+
+
+
 
 </beans>

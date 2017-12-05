@@ -16,10 +16,10 @@ public class ManageUserMapper implements RowMapper< User >
 		User _user = new User( );
 		_user.setUserID(arg0.getInt( "ID" ));
 		_user.setUserName(arg0.getString( "USERNAME" ) );
-		_user.setUserEmail(arg0.getString( "EMAIL" ) );
 		_user.setUserfName(arg0.getString( "FIRST_NAME" ) );
 		_user.setUserlName(arg0.getString( "LAST_NAME" ) );
 		_user.setUserRole(arg0.getString( "ROLE" ));
+		_user.setUserPasswd(arg0.getString( "PASSWORD" ));
 		return _user;
 	}
 }

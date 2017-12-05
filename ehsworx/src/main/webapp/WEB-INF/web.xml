@@ -22,7 +22,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value> 
-		/WEB-INF/applicationContext.xml /WEB-INF/spring-security.xml </param-value>
+		/WEB-INF/applicationContext.xml /WEB-INF/spring-security.xml /WEB-INF/spring-mail.xml</param-value>
 	</context-param>
 
 	<!-- Integrate Spring Security[Secure every URL] -->
@@ -39,4 +39,9 @@
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/accessDenied</location>
+	</error-page>
 </web-app>

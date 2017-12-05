@@ -9,13 +9,15 @@
 	<http pattern="/resources/**" security="none" />
 
 	<http auto-config="true">
+		<access-denied-handler error-page="/403"/>
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/welcome/admin/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/welcome**" access="hasRole('ROLE_NORMAL')" />
+		<intercept-url pattern="/welcome/admin/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/welcome/**" access="hasRole('ROLE_NORMAL') or hasRole('ROLE_ADMIN')" />
 		<form-login login-page='/login' 
 					default-target-url='/welcome'
 					login-processing-url="/j_spring_security_check"
-					username-parameter="ssoId" 
+					username-parameter="username" 
 					password-parameter="password"
 					authentication-failure-url="/login?error=true" />
 
@@ -29,15 +31,9 @@
 
 	<authentication-manager>
 		<authentication-provider>
-			<user-service>
-				<user name="deepak" password="test" authorities="ROLE_ADMIN" />
-			</user-service>
-		</authentication-provider>
-		<authentication-provider>
 			<jdbc-user-service data-source-ref="dataSource"
-			users-by-username-query=""
-			authorities-by-username-query=""
-			/>
+				users-by-username-query="select username, password, active from APP.EHS_SECURITY_USERPROFILE where username=? and active = true"
+				authorities-by-username-query="select username, role from APP.EHS_SECURITY_USERAUTHORITY where username=?" />
 		</authentication-provider>
 	</authentication-manager>
 
