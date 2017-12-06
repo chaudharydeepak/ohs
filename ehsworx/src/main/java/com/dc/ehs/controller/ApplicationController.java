@@ -527,8 +527,8 @@ public class ApplicationController
 	}
 	
 	/**
-	 * This path deletes an observation from system.
-	 * @param metadata
+	 * 
+	 * @param obsId
 	 * @return
 	 */
 	@Secured( value =
