@@ -1,16 +1,14 @@
-@import "bourbon";
-
 body {
 	background: white;	
 }
 
 .wrapper {	
-	margin-top: 80px;
+  margin-top: 80px;
   margin-bottom: 80px;
 }
 
 .form-signin {
-  max-width: 380px;
+  max-width: 450px;
   padding: 15px 35px 45px;
   margin: 0 auto;
   background-color: #fff;

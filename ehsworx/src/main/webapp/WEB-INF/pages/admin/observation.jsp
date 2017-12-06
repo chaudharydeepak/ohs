@@ -118,10 +118,16 @@
                     <form:select path="responsibleManager" items="${respManagerList}" multiple="false" name="manager" class="form-control"/>
                 </div>    
             </div>
-             <div class="form-group row">
+             <!--  <div class="form-group row">
                 <label for="inputAct" class="col-sm-2 col-form-label">Initiated By&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
                 <div class="col-sm-10">
                     <form:select path="initiatedBy" items="${respManagerList}" multiple="false" name="initiater" class="form-control"/>
+                </div>    
+            </div>-->
+            <div class="form-group row">
+                <label for="initiater" class="col-sm-2 col-form-label">Initiated By&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
+                <div class="col-sm-10">
+                	<form:label class="form-control" path="initiatedBy">${initatedByUser}</form:label>
                 </div>    
             </div>
             <div class="form-group row">

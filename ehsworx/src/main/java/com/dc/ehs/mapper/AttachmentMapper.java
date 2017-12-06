@@ -3,15 +3,12 @@ package com.dc.ehs.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.dc.ehs.entity.Attachment;
 
 public class AttachmentMapper implements RowMapper<Attachment>
 {
-private static final Logger LOGGER = Logger.getLogger(AttachmentMapper.class);
-	
 	public Attachment mapRow(ResultSet arg0, int arg1) throws SQLException
 	{
 		Attachment _attachmnt = new Attachment();

@@ -15,7 +15,7 @@
 	<div class="wrapper">
 
 		<form action="j_spring_security_check" method="post" class="form-signin">
-			<p style="text-align:center"><img style="text-align:center;" src="<c:url value='/resources/img/logo-cover.png' />"></img></p>
+			<p style="text-align:center"><img style="text-align:center;width: auto; height: auto;max-width: 100%;max-height: 100%>" src="<c:url value='/resources/img/logo-cover.png'/>"></img></p>
 			<c:if test="${not empty error}">
 				<div class="alert alert-danger">${error}</div>
 			</c:if>

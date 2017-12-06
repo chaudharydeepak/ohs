@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.dc.ehs.entity.MetaData;
-import com.dc.ehs.exception.ServiceExceptionLayer;
 
 public interface LoadObservationMetadataService
 {

@@ -2,6 +2,11 @@ package com.dc.ehs.domain;
 
 import java.util.Date;
 
+/**
+ * Domain object for system user.
+ * @author Deepak Chaudhary
+ *
+ */
 public class User
 {    
 	int userID;

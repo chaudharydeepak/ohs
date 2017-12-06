@@ -17,7 +17,7 @@
 
 <body style="font-family: 'Open Sans', sans-serif;padding-top: 70px;">	
 <%@include file="header.jsp" %>
-<img src="<c:url value='/resources/img/logo.gif' />"></img>
+<img src="<c:url value='/resources/img/logo-cover.png' />"></img>
 <br>
 <br>
 <div style="color:#22229f;margin-left:10px;"><b>OCCUPATIONAL HEALTH, SAFETY & ENVIRONMENTAL OBSERVATION MANAGEMENT SYSTEM</b></div>

@@ -50,6 +50,9 @@
 		action="/ehsworx/welcome/admin/editobs?${_csrf.parameterName}=${_csrf.token}"
 		style="width: 100%">
 		<div class="container">
+			<c:if test="${not empty msg}">
+				<div class="alert alert-success">${msg}</div>
+			</c:if>
 			<div class="form-group row">
 				<!-- Date input -->
 				<label class="col-sm-2 control-label" for="date">Date</label>
@@ -162,9 +165,24 @@
 				<label class="col-sm-2 col-form-label" for="file">Uploaded
 					Attachements</label>
 				<div class="col-sm-10">
+				<table class="table table-bordered table-striped" align="center">
+					<thead>
+						<tr>
+							<th>File ID</th>
+							<th>File Name</th>
+						</tr>
+					</thead>
+					<tbody>
 					<c:forEach items="${attachList}" var="attachmnt">
-						<a href="#">${attachmnt.fileName}</a>
+					<tr>
+						<td>${attachmnt.attch_id}</td>
+						<td>
+							<a href="/ehsworx/welcome/file?filename=${attachmnt.fileName}">${attachmnt.fileName}</a>
+						</td>
+					</tr>		
 					</c:forEach>
+					</tbody>
+				</table>	
 				</div>
 			</div>
 

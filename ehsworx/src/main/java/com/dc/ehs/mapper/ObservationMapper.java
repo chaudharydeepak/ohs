@@ -34,6 +34,7 @@ public class ObservationMapper implements RowMapper< Observation >
 		_obs.setInitrFname( arg0.getString( "first_name" ) );
 		_obs.setInitrLname( arg0.getString( "last_name" ) );
 		_obs.setShoc( arg0.getString( "shoc" ) );
+		_obs.setActionComments( arg0.getString( "actiontxt" ) );
 		// _obs.setPropsdAction(arg0.getString("reference"));
 		return _obs;
 	}

@@ -51,6 +51,8 @@
 
 	<bean id="obsCRUDdao" class="com.dc.ehs.dao.ObservationCRUDDAOImpl" />
 	
+	<bean id="utilMethods" class="com.dc.ehs.util.EhsUtilityMethods" />
+	
 	 <!-- enable the configuration of transactional behavior based on annotations -->
     
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

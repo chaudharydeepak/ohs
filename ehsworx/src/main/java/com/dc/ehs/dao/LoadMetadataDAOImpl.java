@@ -17,6 +17,11 @@ import com.dc.ehs.entity.MetaData;
 import com.dc.ehs.mapper.MetaDataMapper;
 import com.dc.ehs.mapper.MetaDataObjectMapper;
 
+/**
+ * Implementation of Interface LoadMetadataDAO interface.
+ * @author Deepak Chaudhary
+ *
+ */
 public class LoadMetadataDAOImpl implements LoadMetadataDAO
 {
 	private static final Logger			LOGGER	= Logger.getLogger( LoadMetadataDAOImpl.class );
@@ -31,8 +36,14 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( dataSource );
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.LoadMetadataDAO#loadObersvationsMetaData()
+	 */
+	@Override
 	public HashMap< String, List< String > > loadObersvationsMetaData ( )
 	{
+		LOGGER.info( "invoked loadObersvationsMetaData" );
 		HashMap< String, List< String > > metaDataMap = new HashMap< String, List< String > >( );
 		String _sql = "select meta_value from app.obervationsMetadata where meta_key='location' and active = true";
 		metaDataMap.put( "location", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );
@@ -50,20 +61,29 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		metaDataMap.put( "classification", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );
 		
 		_sql = "select first_name || ' ' || last_name || '(' || p.username || ')' as meta_value from app.EHS_SECURITY_USERPROFILE p ,\n"
-		        + "app.EHS_SECURITY_USERAUTHORITY a where p.username = a.username\n" + "and a.role = 'ROLE_NORMAL'\n"
-		        + "and p.active= true";
+		        + "app.EHS_SECURITY_USERAUTHORITY a where p.username = a.username\n" + "and p.active= true";
 		metaDataMap.put( "responsibleUser", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );
 		
 		return metaDataMap;
 		
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.LoadMetadataDAO#loadMetaDataForEdit()
+	 */
+	@Override
 	public List< MetaData > loadMetaDataForEdit ( )
 	{
 		String _sql = "select * from app.obervationsMetadata where active = true order by meta_key";
 		return jdbcTemplate.query( _sql, new MetaDataObjectMapper( ) );
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.LoadMetadataDAO#saveMetaData(int, java.lang.String, java.lang.String)
+	 */
+	@Override
 	public String saveMetaData ( int id, String metaType, String metaValue )
 	{
 		String _sql = "update app.obervationsMetadata set meta_value=:metaValue where meta_key=:metaType and id=:id";
@@ -75,6 +95,11 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		return "success";
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.LoadMetadataDAO#createMetaData(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public String createMetaData ( String metaType, String metaValue )
 	{
 		String fetchCurrentID = "select case when max(id) is null then 1 else max(id) end from APP.obervationsMetadata";
@@ -89,15 +114,20 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		return "success";
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.LoadMetadataDAO#deleteMetaData(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public String deleteMetaData ( String metaData, String modfdBy )
 	{
 		List< String > metaDataList = new ArrayList< String >( Arrays.asList( metaData.split( "," ) ) );
 		String _SQL4Meta = "update app.obervationsMetadata set active=false where meta_key=:meta_key and id=:id";
 		Map< String, Object > namedParameters = new HashMap< String, Object >( );
 		metaDataList.forEach( metaobj -> {
-			String meta[] = metaobj.split("_");
-			namedParameters.put( "id", meta[0] );
-			namedParameters.put( "meta_key", meta[1] );
+			String meta[] = metaobj.split( "_" );
+			namedParameters.put( "id", meta[ 0 ] );
+			namedParameters.put( "meta_key", meta[ 1 ] );
 			namedParameterJdbcTemplate.update( _SQL4Meta, namedParameters );
 		} );
 		return "success";

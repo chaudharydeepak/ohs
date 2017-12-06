@@ -1,5 +1,7 @@
 package com.dc.ehs.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +31,7 @@ import com.dc.ehs.entity.Observation;
 import com.dc.ehs.helper.EhsHelper;
 
 /**
- * 
+ * Main controller for entire application.
  * @author Deepak Chaudhary
  *
  */
@@ -42,19 +45,21 @@ public class ApplicationController
 	
 	private static final Logger	LOGGER	= Logger.getLogger( ApplicationController.class );
 	
-	
+	/**
+	 * This path loads home page.
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping( method = RequestMethod.GET )
 	public String loadLanding ( ModelMap model )
 	{
 		
 		LOGGER.info( "invoked loadHome " );
-		/* return doc search view */
-		//model.addAttribute( "observationList", ehsHelper.loadAllObservations( ) );
 		return "landing";
 	}
 	
 	/**
-	 * 
+	 * This path loads all observations for managing purposes/
 	 * @param model
 	 * @return
 	 */
@@ -69,7 +74,25 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path downloads a user file.
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping( value = "/file", method = RequestMethod.GET )
+	public ResponseEntity< InputStreamResource > downloadFile ( @RequestParam( "filename" ) String fileName )
+	        throws IOException
+	{
+		String filePath = "C:/Users/chaudhde/Documents/Deepak_Personal/Japan_TC/dc_consulting/docs/" + fileName;
+		File file = new File( filePath );
+		InputStreamResource resource = new InputStreamResource( new FileInputStream( file ) );
+		
+		return ResponseEntity.ok( ).header( HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName( ) )
+		        .contentType( MediaType.APPLICATION_OCTET_STREAM ).contentLength( file.length( ) ).body( resource );
+	}
+	
+	/**
+	 * This path sets status / uploads document for a observation - assigned status.
 	 * @param model
 	 * @param observation
 	 * @return
@@ -80,12 +103,14 @@ public class ApplicationController
 	public ModelAndView approve ( ModelMap model, Observation observation ) throws IOException
 	{
 		LOGGER.info( "invoked assigned " );
-		ehsHelper.setStatus( Integer.valueOf( observation.getObsID( ) ), "In_Progress" );
+		LOGGER.info( "getActionComments --" + observation.getActionComments( ) );
+		ehsHelper.setStatus( Integer.valueOf( observation.getObsID( ) ), "In_Progress",
+		        observation.getActionComments( ), observation.getFile( ) );
 		return new ModelAndView( "redirect:/welcome/action?name=" + observation.getObsID( ) );
 	}
 	
 	/**
-	 * 
+	 * This path sets status / uploads document for a observation - in-progress status.
 	 * @param model
 	 * @param observation
 	 * @return
@@ -96,12 +121,13 @@ public class ApplicationController
 	public ModelAndView deny ( ModelMap model, Observation observation ) throws IOException
 	{
 		LOGGER.info( "invoked inprogress " );
-		ehsHelper.setStatus( Integer.valueOf( observation.getObsID( ) ), "Completed." );
+		ehsHelper.setStatus( Integer.valueOf( observation.getObsID( ) ), "Completed", observation.getActionComments( ),
+		        observation.getFile( ) );
 		return new ModelAndView( "redirect:/welcome/action?name=" + observation.getObsID( ) );
 	}
 	
 	/**
-	 * 
+	 * This path loads observation for action by user.
 	 * @param obsId
 	 * @param model
 	 * @return
@@ -109,14 +135,8 @@ public class ApplicationController
 	@RequestMapping( value = "/action", method = RequestMethod.GET )
 	public String loadActionOnObservation ( @RequestParam( "name" ) String obsId, ModelMap model )
 	{
+		LOGGER.info( "invoked loadActionOnObservation for " + obsId );
 		
-		LOGGER.info( "invoked loadbservation for " + obsId );
-		
-		// ehsHelper.loadObservation(obsId);
-		
-		LOGGER.info( "successfully created observation with ID " + obsId );
-		
-		/* now lest load all observations */
 		HashMap< String, List< String > > metaDataMap = ehsHelper.loadObersvationsMetaData( );
 		
 		model.addAttribute( "locationList", metaDataMap.get( "location" ) );
@@ -131,16 +151,17 @@ public class ApplicationController
 		model.addAttribute( "attachList", retreivedObs.getAttachList( ) );
 		model.addAttribute( "status", retreivedObs.getStatus( ) );
 		model.addAttribute( "observation", retreivedObs );
-		
-		/* return doc search view */
 		return "observation_action";
+		
 	}
 	
 	/**
-	 * 
+	 * This path presents create new observation page to ADMIN users.
 	 * @param model
 	 * @return
 	 */
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/admin", method = RequestMethod.GET )
 	public String loadObservation ( ModelMap model )
 	{
@@ -154,17 +175,15 @@ public class ApplicationController
 		model.addAttribute( "shocList", metaDataMap.get( "shoc" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
-		
-		// Observation observation = new Observation();
-		// observation.setOperationType("new");
+		/** set current logged-in user as initiatedByUser Field on UI. **/
+		model.addAttribute( "initatedByUser", ehsHelper.getLoggedInUserWrapper( ) );
 		model.addAttribute( "observation", new Observation( ) );
 		
-		/* return doc search view */
 		return "admin/observation";
 	}
 	
 	/**
-	 * 
+	 * This action creates new observation in database and redirects traffic to load the observation.
 	 * @param observation
 	 * @param model
 	 * @return
@@ -172,6 +191,8 @@ public class ApplicationController
 	 * @throws MessagingException
 	 * @throws ParseException
 	 */
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/admin/createobs", method = RequestMethod.POST )
 	public ModelAndView createObservation ( Observation observation, ModelMap model )
 	        throws IOException, MessagingException, ParseException
@@ -192,7 +213,7 @@ public class ApplicationController
 		/* now lest load all observations */
 		if ( observation.getOperationType( ).equalsIgnoreCase( "new" ) )
 		{
-			return new ModelAndView( "redirect:/welcome" );
+			return new ModelAndView( "redirect:/welcome/mgobs" );
 		}
 		else
 		{
@@ -201,19 +222,17 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path loads an observation for editing.
 	 * @param obsId
 	 * @param model
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping( value = "/admin/loadObs", method = RequestMethod.GET )
-	public String loadbservation ( @RequestParam( "name" ) String obsId, ModelMap model ) throws IOException
+	public String loadbservation ( @RequestParam( "name" ) String obsId,
+	        @RequestParam( value = "msg", required = false ) String msg, ModelMap model ) throws IOException
 	{
 		LOGGER.info( "invoked loadbservation for " + obsId );
-		
-		// ehsHelper.loadObservation(obsId);
-		
 		LOGGER.info( "successfully created observation with ID " + obsId );
 		
 		/* now lest load all observations */
@@ -225,22 +244,19 @@ public class ApplicationController
 		model.addAttribute( "shocList", metaDataMap.get( "shoc" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
+		if ( null != msg && msg.trim( ).length( ) > 0 )
+			model.addAttribute( "msg", msg );
 		
 		Observation retreivedObs = ehsHelper.loadObservation( obsId );
 		
-		// LOGGER.info("this has action count -- " +
-		// retreivedObs.getActionsList().size());
-		// LOGGER.info("this has attach count -- " +
-		// retreivedObs.getAttachList().size());
 		model.addAttribute( "attachList", retreivedObs.getAttachList( ) );
 		model.addAttribute( "observation", retreivedObs );
 		
-		/* return doc search view */
 		return "admin/observation_edit";
 	}
 	
 	/**
-	 * 
+	 * This path updates the observation and redirects traffic to load saved observation.
 	 * @param observation
 	 * @param model
 	 * @return
@@ -248,69 +264,75 @@ public class ApplicationController
 	 * @throws MessagingException
 	 * @throws ParseException
 	 */
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/admin/editobs", method = RequestMethod.POST )
 	public ModelAndView editObservation ( Observation observation, ModelMap model )
 	        throws IOException, MessagingException, ParseException
 	{
 		LOGGER.info( "invoked createObservation " + observation );
 		
-		if ( null != observation )
+		/*
+		 * make sure observation is not in complete phase, else editing not
+		 * allowed.
+		 */
+		String obsStatus = ehsHelper.fetchStatusForObs( Integer.valueOf( observation.getObsID( ) ) );
+		
+		if ( null != obsStatus & !obsStatus.trim( ).equalsIgnoreCase( "Completed" ) )
 		{
-			LOGGER.info( " Requested operation -- " + observation.getOperationType( ) );
-		}
-		/* return doc search view */
-		observation.setOperationType( "edit" );
-		LOGGER.info( " Check Requested operation -- " + observation.getOperationType( ) );
-		
-		List< Actions > _actionsList = observation.getActionsList( );
-		
-		_actionsList.forEach( actionObj -> {
-			LOGGER.warn( "check updated action item " + actionObj.getActionTxt( ) );
-		} );
-		
-		LOGGER.warn( "$$$$$$$$$$$ 1-- > " + observation.getPropsdAction( ) );
-		LOGGER.warn( "$$$$$$$$$$$ 2-- > " + observation.getPropsdAction_2( ) );
-		LOGGER.warn( "$$$$$$$$$$$ 3-- > " + observation.getPropsdAction_3( ) );
-		LOGGER.warn( "$$$$$$$$$$$ 4-- > " + observation.getPropsdAction_4( ) );
-		LOGGER.warn( "$$$$$$$$$$$ 5-- > " + observation.getPropsdAction_5( ) );
-		
-		LOGGER.info( "########### Check Requested operation -- " + observation.getObsID( ) );
-		int obsId = ehsHelper.saveObservation( observation );
-		
-		LOGGER.info( "successfully" + observation.getOperationType( ) + " observation with ID " + obsId );
-		
-		/* now lest load all observations */
-		if ( observation.getOperationType( ).equalsIgnoreCase( "new" ) )
-		{
-			return new ModelAndView( "redirect:/welcome" );
+			observation.setOperationType( "edit" );
+			LOGGER.info( " Check Requested operation -- " + observation.getOperationType( ) );
+			
+			List< Actions > _actionsList = observation.getActionsList( );
+			
+			_actionsList.forEach( actionObj -> {
+				LOGGER.warn( "check updated action item " + actionObj.getActionTxt( ) );
+			} );
+			
+			int obsId = ehsHelper.saveObservation( observation );
+			
+			LOGGER.info( "successfully" + observation.getOperationType( ) + " observation with ID " + obsId );
+			
+			/* now lest load all observations */
+			if ( observation.getOperationType( ).equalsIgnoreCase( "new" ) )
+			{
+				return new ModelAndView( "redirect:/welcome" );
+			}
+			else
+			{
+				return new ModelAndView( "redirect:/welcome/admin/loadObs?name=" + obsId );
+			}
 		}
 		else
 		{
-			return new ModelAndView( "redirect:/welcome/admin/loadObs?name=" + obsId );
+			return new ModelAndView( "redirect:/welcome/admin/loadObs?name=" + observation.getObsID( )
+			        + "&msg=This observation cannot be modified." );
 		}
 	}
 	
 	/**
-	 * 
+	 * This path presents user management screen.
 	 * @param model
 	 * @return
 	 */
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/admin/manageuser", method = RequestMethod.GET )
 	public String loadUser ( ModelMap model )
 	{
 		LOGGER.info( "invoked loadUser " );
 		model.addAttribute( "userList", ehsHelper.loadAllUsers( "all" ) );
-		/* return doc search view */
 		return "admin/manageuser";
 	}
 	
 	/**
-	 * 
+	 * This path saves user updates in database.
 	 * @param formParams
 	 * @param type
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/saveUser", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > saveUser ( @RequestBody MultiValueMap< String, String > formParams,
 	        @RequestParam( value = "type", required = true ) String type )
@@ -349,11 +371,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path creates a new user in database.
 	 * @param formParams
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/createUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > createUser ( @RequestBody MultiValueMap< String, String > formParams )
 	{
@@ -377,11 +400,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path deletes user from database.
 	 * @param users
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/deleteUser", method = RequestMethod.POST )
 	public ResponseEntity< String > deleteUser ( @RequestParam( value = "users", required = true ) String users )
 	{
@@ -400,10 +424,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path loads metadata management screen.
 	 * @param model
 	 * @return
 	 */
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/admin/managmtdt", method = RequestMethod.GET )
 	public String loadMetadata ( ModelMap model )
 	{
@@ -412,11 +438,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path saves metadata changes into the database.
 	 * @param formParams
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/saveMetaData", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE )
 	public ResponseEntity< String > saveMetaData ( @RequestBody MultiValueMap< String, String > formParams )
 	{
@@ -449,12 +476,13 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path creates new metadata line items.
 	 * @param value
 	 * @param type
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/createMetaData", method = RequestMethod.POST )
 	public ResponseEntity< String > createMetaData ( @RequestParam( value = "value", required = true ) String value,
 	        @RequestParam( value = "type", required = true ) String type )
@@ -474,11 +502,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path delets metadata from database.
 	 * @param metadata
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/deleteMetaData", method = RequestMethod.POST )
 	public ResponseEntity< String > deleteMetaData (
 	        @RequestParam( value = "metadata", required = true ) String metadata )
@@ -498,11 +527,12 @@ public class ApplicationController
 	}
 	
 	/**
-	 * 
+	 * This path deletes an observation from system.
 	 * @param metadata
 	 * @return
 	 */
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured( value =
+	{ "ROLE_ADMIN" } )
 	@RequestMapping( value = "/deleteObs", method = RequestMethod.POST )
 	public ResponseEntity< String > deleteObs ( @RequestParam( value = "obsId", required = true ) String obsId )
 	{
@@ -519,5 +549,4 @@ public class ApplicationController
 		}
 		return new ResponseEntity< String >( responseHeaders, HttpStatus.OK );
 	}
-	
 }

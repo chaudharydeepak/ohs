@@ -156,6 +156,14 @@
 			</div>
 		</div>
 		<div class="form-group row">
+			<label for=actionComments class="col-sm-2 col-form-label">
+				Action Comments</label>
+			<div class="col-sm-10">
+				<form:textarea path="actionComments" type="text" class="form-control"
+					id="actionComments" rows="3" placeholder="Action Comments"/>
+			</div>
+		</div>
+		<div class="form-group row">
 			<label class="col-sm-2 col-form-label" for="file">Upload
 				Attachements</label>
 			<div class="col-sm-10">
@@ -167,9 +175,24 @@
 			<label class="col-sm-2 col-form-label" for="file">Uploaded
 				Attachements</label>
 			<div class="col-sm-10">
-				<c:forEach items="${attachList}" var="attachmnt">
-					<a href="#">${attachmnt.fileName}</a>
-				</c:forEach>
+				<table class="table table-bordered table-striped" align="center">
+					<thead>
+						<tr>
+							<th>File ID</th>
+							<th>File Name</th>
+						</tr>
+					</thead>
+					<tbody>
+					<c:forEach items="${attachList}" var="attachmnt">
+					<tr>
+						<td>${attachmnt.attch_id}</td>
+						<td>
+							<a href="/ehsworx/welcome/file?filename=${attachmnt.fileName}">${attachmnt.fileName}</a>
+						</td>
+					</tr>		
+					</c:forEach>
+					</tbody>
+				</table>	
 			</div>
 		</div>
 

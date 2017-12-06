@@ -10,27 +10,33 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.dc.ehs.domain.User;
 import com.dc.ehs.mapper.ManageUserMapper;
 
+/**
+ * Implementation of Interface ManageUserDAO interface.
+ * @author Deepak Chaudhary
+ *
+ */
 public class ManageUserDAOImpl implements ManageUserDAO
 {
 	private static final Logger			LOGGER	= Logger.getLogger( ManageUserDAOImpl.class );
 	
 	private NamedParameterJdbcTemplate	namedParameterJdbcTemplate;
 	
-	private JdbcTemplate				jdbcTemplate;
-	
 	@Autowired
 	public void setDataSource ( DataSource dataSource )
 	{
-		this.jdbcTemplate = new JdbcTemplate( dataSource );
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( dataSource );
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.ManageUserDAO#loadUsers(java.lang.String)
+	 */
+	@Override
 	public List< User > loadUsers ( String username )
 	{
 		LOGGER.info( "invoked  loadUsers " );
@@ -39,6 +45,10 @@ public class ManageUserDAOImpl implements ManageUserDAO
 		return usersList;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.ManageUserDAO#saveUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String saveUser ( String username, String key, String value, String modfdBy )
 	{
@@ -75,6 +85,11 @@ public class ManageUserDAOImpl implements ManageUserDAO
 		return "success";
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.ManageUserDAO#createUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
 	public String createUser ( String username, String password, String firstname, String lastname, String role,
 	        String modfdBy )
 	{
@@ -93,6 +108,11 @@ public class ManageUserDAOImpl implements ManageUserDAO
 		return "success";
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.dc.ehs.dao.ManageUserDAO#deleteUser(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public String deleteUser ( String userList, String modfdBy )
 	{
 		List< String > userslist = new ArrayList< String >( Arrays.asList( userList.split( "," ) ) );

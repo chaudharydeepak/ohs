@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dc.ehs.dao.ManageUserDAO;
 import com.dc.ehs.domain.User;
-import com.dc.ehs.entity.MetaData;
-import com.dc.ehs.exception.ServiceExceptionLayer;
 
 @Transactional
 public class ManageUserServiceImpl implements ManageUserService

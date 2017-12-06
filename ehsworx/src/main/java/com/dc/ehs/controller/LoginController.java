@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
+/**
+ * Login controller.
+ * @author Deepak Chaudhary
+ *
+ */
 @Controller
 public class LoginController
 {
@@ -17,7 +21,7 @@ public class LoginController
 	private static final Logger	LOGGER	= Logger.getLogger( LoginController.class );
 	
 	/**
-	 * 
+	 * This method provides login functioality for the system.
 	 * @param error
 	 *            paramter to show authentication failure message.
 	 * @param logout

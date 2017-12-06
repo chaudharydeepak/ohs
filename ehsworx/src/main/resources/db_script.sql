@@ -85,6 +85,8 @@ alter table app.ObservationMaster add obs_date date;
 
 alter table app.ObservationMaster add project varchar(500);
 
+alter table app.ObservationMaster add actiontxt varchar(500);
+
 CREATE table app.ObservationActions (
 obs_id int not null,
 action_id int not null,
@@ -106,4 +108,20 @@ ALTER TABLE APP.ObservationAttachmnts
 ADD FOREIGN KEY (obs_id) 
 REFERENCES APP.ObservationMaster(obs_id)	;
 
+
+CREATE TABLE APP.OBSERVATIONACTION (
+obs_id int not null,
+actionText varchar(500),
+actionBy varchar(100),
+actionDt date
+)
+
+drop table APP.OBSERVATIONACTION
+
 update "APP"."EHS_SECURITY_USERPROFILE" set password = '$2a$10$vHVPkHxxFTyB/sXOUBuhaOH5gRqA/ZZ0aW3VK7fK0yvZBRGkvKigG' where username = 'chaudharydeepak08@gmail.com';
+
+select * from app.ObservationMaster 
+
+select respMgr from app.ObservationMaster where obs_id=216
+
+update APP.ObservationMaster set status = 'Assigned', active = true where obs_id = 224
