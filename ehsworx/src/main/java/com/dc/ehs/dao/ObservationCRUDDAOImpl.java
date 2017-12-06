@@ -1,6 +1,9 @@
 package com.dc.ehs.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +56,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#saveObservation(com.dc.ehs.entity.
 	 * Observation)
 	 */
-	public int saveObservation ( Observation observation ) throws MessagingException
+	public int saveObservation ( Observation observation ) throws MessagingException, ParseException
 	{
 		int obs_id = 0;
 		int actionNumber = 0;
@@ -62,19 +65,24 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 		Map< String, Object > namedParameters;
 		if ( observation.getOperationType( ).equalsIgnoreCase( "new" ) )
 		{
+			/*String DATE_FORMAT = "MM/dd/yyyy";
+		    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		    String _convDate = sdf.format(observation.getDate( ));
+		    LOGGER.info( "_convDate " + _convDate );*/
+		    
 			String fetchObsNm = "select t from ( values next value for app.observation_number_id ) s( t) ";
 			obs_id = jdbcTemplate.queryForObject( fetchObsNm, Integer.class );
 			_SQL = "insert into app.ObservationMaster ( obs_id, \n" + "status,\n" + "active,\n" + "reference,  \n"
 			        + "location, \n" + "department, \n" + "observrType, \n" + "behalfOf,\n" + "contact_info, \n"
 			        + "shoc, \n" + "classification, \n" + "obsTxt,\n" + "respMgr, \n" + "initiatedBy, \n"
-			        + "creatd_dt, \n" + "creatd_by) values (" + obs_id + ",\n" + "'Assigned'" + ",\n" + "'true'" + ",\n"
+			        + "creatd_dt, \n" + "creatd_by, obs_date, project) values (" + obs_id + ",\n" + "'Assigned'" + ",\n" + "'true'" + ",\n"
 			        + "'" + observation.getObsRef( ) + "',\n" + "'" + observation.getLocations( ) + "',\n" + "'"
 			        + observation.getDepartments( ) + "',\n" + "'" + observation.getWhobsvd( ) + "',\n" + "'"
 			        + observation.getObsBehf( ) + "',\n" + "'" + observation.getObsContctInfo( ) + "',\n" + "'"
 			        + observation.getShoc( ) + "',\n" + "'" + observation.getClassification( ) + "',\n" + "'"
 			        + observation.getObsTxt( ) + "',\n" + "'" + observation.getResponsibleManager( ) + "',\n" + "'"
-			        + observation.getInitiatedby( ) + "',\n" + "CURRENT_DATE" + ",\n" + "'"
-			        + observation.getInitiatedby( ) + "')";
+			        + observation.getInitiatedby( ) + "', CURRENT_DATE ,\n" + "'"
+			        + observation.getInitiatedby( ) + "','" + observation.getDate( ) + "','" + observation.getProject( ) + "')";
 			
 			jdbcTemplate.update( _SQL );
 			
@@ -135,15 +143,15 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			/* Lets send email */
 			String respManager = ( observation.getResponsibleManager( ).split( "\\(" )[ 1 ] ).replace( ")", "" );
 			LOGGER.info( "updated notification for " + respManager );
-			emailService.sendMail( "chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action",
+			/**emailService.sendMail( "chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action",
 			        "Dear " + observation.getResponsibleManager( )
 			                + ", <br><br> New Observation is assigned for your action. Please access below:<br>http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/welcome/action?name="
-			                + obs_id + "<br><br>Best Regards,<br>EHS Observations" );
+			                + obs_id + "<br><br>Best Regards,<br>EHS Observations" ); **/
 		}
 		else
 		{
 			_SQL = "update app.ObservationMaster set reference=:ref, location=:loc, department=:dept, observrType=:obsType, behalfOf=:behalfOf, contact_info=:cntct, shoc=:sho, classification=:class"
-			        + ", obsTxt=:obsText, respMgr=:resp, initiatedBy=:initby, modfd_dt=CURRENT_DATE, modfd_by=:mdfdby where obs_id=:obsId and upper(status) not like '%COMP%'";
+			        + ", obsTxt=:obsText, respMgr=:resp, initiatedBy=:initby, modfd_dt=CURRENT_DATE, modfd_by=:mdfdby, project=:project, obs_date=:obsDate where obs_id=:obsId and upper(status) not like '%COMP%'";
 			
 			namedParameters = new HashMap< String, Object >( );
 			
@@ -160,6 +168,8 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			namedParameters.put( "initby", observation.getInitiatedby( ) );
 			namedParameters.put( "mdfdby", observation.getInitiatedby( ) );
 			namedParameters.put( "obsId", Integer.valueOf( observation.getObsID( ) ) );
+			namedParameters.put( "project",  observation.getProject( ) ) ;
+			namedParameters.put( "obsDate", observation.getDate( ) ) ;
 			namedParameterJdbcTemplate.update( _SQL, namedParameters );
 			
 			obs_id = Integer.valueOf( observation.getObsID( ) );
@@ -221,7 +231,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	public Observation loadObservation ( int observationId )
 	{
 		Observation obsMaster = null;
-		String fetchObservation = "Select * from app.ObservationMaster where obs_id=:obsid";
+		String fetchObservation = "select o.*, u.first_name, u.last_name from app.ObservationMaster o, app.EHS_SECURITY_USERPROFILE u where o.initiatedby = u.username and obs_id=:obsid and o.active=true";
 		
 		Map< String, Object > namedParameters = new HashMap< String, Object >( );
 		
@@ -267,12 +277,12 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	 */
 	public List< Observation > loadAllObservations ( String username )
 	{
-		String fetchAllObservations = "select * from app.ObservationMaster";
+		String fetchAllObservations = "select o.*, u.first_name, u.last_name from app.ObservationMaster o, app.EHS_SECURITY_USERPROFILE u where o.initiatedby = u.username and o.active = true";
 		List< Observation > obsList = null;
 		if ( !hasRole( "ROLE_ADMIN" ) )
 		{
 			LOGGER.info( "username is not admin -- fetching assigned obs :" );
-			fetchAllObservations = "select * from app.ObservationMaster where respMgr like '%" + username + "%'";
+			fetchAllObservations = fetchAllObservations + " and respMgr like '%" + username + "%'";
 		}
 		obsList = namedParameterJdbcTemplate.query( fetchAllObservations, new ObservationMapper( ) );
 		return obsList;
@@ -306,6 +316,16 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 		namedParameters.put( "mdfdby", user );
 		namedParameters.put( "status", status );
 		namedParameters.put( "obsId", observationId );
+		namedParameterJdbcTemplate.update( _SQL, namedParameters );
+		return "success";
+	}
+	
+	public String deleteObservation( int obsId, String mdfdby )
+	{
+		String _SQL = "update app.ObservationMaster set active= false, modfd_dt=CURRENT_DATE, modfd_by=:mdfdby where obs_id=:obsId";
+		Map< String, Object > namedParameters = new HashMap< String, Object >( );
+		namedParameters.put( "mdfdby", mdfdby );
+		namedParameters.put( "obsId", obsId );
 		namedParameterJdbcTemplate.update( _SQL, namedParameters );
 		return "success";
 	}

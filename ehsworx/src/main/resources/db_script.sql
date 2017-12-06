@@ -74,21 +74,6 @@ insert into app.EHS_SECURITY_USERAUTHORITY values (
 'chaudharydeepak08@me.com',
 'ROLE_NORMAL');
 
---select * from app.EHS_SECURITY_USERAUTHORITY;
---select * from app.EHS_SECURITY_USERPROFILE;
---
---delete from app.EHS_SECURITY_USERPROFILE;
---delete from app.EHS_SECURITY_USERAUTHORITY;
-
---drop table app.EHS_SECURITY_USERPROFILE;
---drop table app.EHS_SECURITY_USERAUTHORITY ;
-
--- drop table app.obervationsMetadata
-
---select username, password, active from app.EHS_SECURITY_USERPROFILE where username='chaudharydeepak08@gmail.com' and active = true
-
-drop table app.obervationsMetadata;
-
 create table app.obervationsMetadata( id int not null, meta_key varchar(100) not null, meta_value varchar(200) not null , active boolean);
 ALTER TABLE APP.obervationsMetadata
 ADD PRIMARY KEY(meta_key,meta_value);
@@ -137,6 +122,10 @@ creatd_by varchar(100) ,
 modfd_dt date,
 modfd_by varchar(100));
 
+alter table app.ObservationMaster add obs_date date;
+
+alter table app.ObservationMaster add project varchar(500);
+
 CREATE table app.ObservationActions (
 obs_id int not null,
 action_id int not null,
@@ -164,8 +153,9 @@ REFERENCES APP.ObservationMaster(obs_id)	;
 --select * from app.ObservationActions
 --select * from app.ObservationAttachmnts
 
---drop table app.ObservationActions;
---drop table app.ObservationAttachmnts;
+--truncate table app.ObservationActions;
+--truncate table app.ObservationAttachmnts;
+--delete from app.ObservationMaster;
 
 --select username, role from APP.EHS_SECURITY_USERAUTHORITY where username='chaudharydeepak08@gmail.com'
 
@@ -216,3 +206,18 @@ select case when max(id) is null then 1 else max(id) end from APP.obervationsMet
 
 
 select * from app.ObservationMaster
+
+select * from app.ObservationActions;
+select * from app.ObservationAttachmnts;
+--delete from app.ObservationMaster;
+
+
+select o.*, u.first_name, u.last_name from app.ObservationMaster o, app.EHS_SECURITY_USERPROFILE u
+where o.initiatedby = u.username
+
+
+select o.*, u.first_name, u.last_name from app.ObservationMaster o, app.EHS_SECURITY_USERPROFILE u where o.initiatedby = u.username and o.active = true
+
+update "APP"."EHS_SECURITY_USERPROFILE" set password = '$2a$10$vHVPkHxxFTyB/sXOUBuhaOH5gRqA/ZZ0aW3VK7fK0yvZBRGkvKigG' where username = 'chaudharydeepak08@gmail.com'
+
+select * from "APP"."EHS_SECURITY_USERPROFILE"

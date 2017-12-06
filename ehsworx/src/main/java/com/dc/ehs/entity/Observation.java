@@ -41,17 +41,53 @@ public class Observation
 	 
 	 MultipartFile file;
 	 
-	 @DateTimeFormat(pattern = "yyyy-mm-dd")
-	 Date date;
+	 String date;
 	 
-	 @DateTimeFormat(pattern = "yyyy-mm-dd")
 	 Date created_dt;
 	 
 	 String initiatedby;
 	 
 	 String operationType;
 	 
-	 public Observation()
+	 String project;
+	 
+	 String initrFname;
+	 
+	 String initrLname;
+	 
+	
+
+	public String getInitrFname ( )
+	{
+		return initrFname;
+	}
+
+	public void setInitrFname ( String initrFname )
+	{
+		this.initrFname = initrFname;
+	}
+
+	public String getInitrLname ( )
+	{
+		return initrLname;
+	}
+
+	public void setInitrLname ( String initrLname )
+	{
+		this.initrLname = initrLname;
+	}
+
+	public String getProject ( )
+	{
+		return project;
+	}
+
+	public void setProject ( String project )
+	{
+		this.project = project;
+	}
+
+	public Observation()
 	 {
 		 this.operationType="new";
 	 }
@@ -161,11 +197,11 @@ public class Observation
 	{
 		this.propsdAction = propsdAction;
 	}
-	public Date getDate()
+	public String getDate()
 	{
 		return date;
 	}
-	public void setDate(Date date)
+	public void setDate(String date)
 	{
 		this.date = date;
 	}

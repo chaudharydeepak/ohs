@@ -1,4 +1,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
@@ -8,13 +9,15 @@
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
 		">
 
 	<!-- mvc-dispatcher-servlet should contain configs relevant to Spring MVC. -->
 
 	<!-- Force both annotation / mvc resources mappings. -->
 	<mvc:annotation-driven />
-	
+	<security:global-method-security secured-annotations="enabled"/>	
 
 	<!-- Base Scan. -->
 	<context:component-scan base-package="com.dc.ehs.controller" />

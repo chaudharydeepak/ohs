@@ -20,7 +20,7 @@
       var date_input=$('input[name="date"]'); //our date input has the name "date"
       var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
       var options={
-        format: 'yyyy-mm-dd',
+        format: 'mm/dd/yyyy',
         container: container,
         todayHighlight: true,
         autoclose: true,
@@ -38,7 +38,7 @@
              <div class="form-group row"> <!-- Date input -->
                     <label class="col-sm-2 control-label" for="date">Date&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
                     <div class="col-sm-10">
-                        <form:input path="date" class="form-control" id="date" placeholder="yyyy-mm-dd" type="text"  data-error="Please select a date." required="true"/>
+                        <form:input path="date" class="form-control" id="date" placeholder="mm/dd/yyyy" type="text"  data-error="Please select a date." required="true"/>
                         <div class="help-block with-errors"></div>
                     </div>
               </div>
@@ -75,6 +75,12 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
+                <div class="col-sm-10">
+                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project"/>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="inputinfo" class="col-sm-2 col-form-label">Company/Contact Info</label>
                 <div class="col-sm-10">
                     <form:input path="obsContctInfo" type="text" class="form-control" id="inputinfo" placeholder="Enter Comp/Contact Info"/>
@@ -88,8 +94,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputcard" class="col-sm-2 col-form-label">Paper
-                    SHOC Card&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
+                <label for="inputcard" class="col-sm-2 col-form-label">Type of Observation&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
                 <div class="col-sm-10">
                     <form:select path="shoc" items="${shocList}" multiple="false" name="paperShoc" class="form-control"/>
                 </div>
@@ -102,33 +107,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action 1</label>
+                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action</label>
                 <div class="col-sm-10">
                     <form:textarea path="propsdAction" class="form-control" id="inputAct" rows="3"/>
-                </div>    
-            </div>
-            <div class="form-group row">
-                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action 2</label>
-                <div class="col-sm-10">
-                    <form:textarea path="propsdAction_2" class="form-control" id="inputAct" rows="3"/>
-                </div>    
-            </div>
-            <div class="form-group row">
-                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action 3</label>
-                <div class="col-sm-10">
-                    <form:textarea path="propsdAction_3" class="form-control" id="inputAct" rows="3"/>
-                </div>    
-            </div>
-            <div class="form-group row">
-                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action 4</label>
-                <div class="col-sm-10">
-                    <form:textarea path="propsdAction_4" class="form-control" id="inputAct" rows="3"/>
-                </div>    
-            </div>
-            <div class="form-group row">
-                <label for="inputAct" class="col-sm-2 col-form-label">Proposed Action 5</label>
-                <div class="col-sm-10">
-                    <form:textarea path="propsdAction_5" class="form-control" id="inputAct" rows="3"/>
                 </div>    
             </div>
             <div class="form-group row">
