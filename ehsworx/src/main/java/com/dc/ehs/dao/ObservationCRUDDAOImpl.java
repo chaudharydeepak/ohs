@@ -143,10 +143,10 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			/* Lets send email */
 			String respManager = ( observation.getResponsibleManager( ).split( "\\(" )[ 1 ] ).replace( ")", "" );
 			LOGGER.info( "updated notification for " + respManager );
-			/**emailService.sendMail( "chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action",
+			emailService.sendMail( "chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action",
 			        "Dear " + observation.getResponsibleManager( )
 			                + ", <br><br> New Observation is assigned for your action. Please access below:<br>http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/welcome/action?name="
-			                + obs_id + "<br><br>Best Regards,<br>EHS Observations" ); **/
+			                + obs_id + "<br><br>Best Regards,<br>EHS Observations" ); 
 		}
 		else
 		{
