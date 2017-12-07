@@ -98,7 +98,7 @@ public class EhsUtilityMethods
 		if ( null != _multipartFile && null != _multipartFile.getOriginalFilename( )
 		        && !_multipartFile.getOriginalFilename( ).trim( ).isEmpty( ) )
 			FileCopyUtils.copy( _multipartFile.getBytes( ),
-			        new File( "C:/Users/chaudhde/Documents/Deepak_Personal/Japan_TC/dc_consulting/docs/"
+			        new File( "/home/ec2-user/tools/docs/"
 			                + multipartFile.getOriginalFilename( ) ) );
 	}
 }

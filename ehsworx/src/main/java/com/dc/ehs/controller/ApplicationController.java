@@ -83,7 +83,7 @@ public class ApplicationController
 	public ResponseEntity< InputStreamResource > downloadFile ( @RequestParam( "filename" ) String fileName )
 	        throws IOException
 	{
-		String filePath = "C:/Users/chaudhde/Documents/Deepak_Personal/Japan_TC/dc_consulting/docs/" + fileName;
+		String filePath = "/home/ec2-user/tools/docs/" + fileName;
 		File file = new File( filePath );
 		InputStreamResource resource = new InputStreamResource( new FileInputStream( file ) );
 		
