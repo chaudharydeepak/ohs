@@ -80,7 +80,7 @@ public class EhsHelper
 	
 	public int saveObservation ( Observation observation ) throws IOException, MessagingException, ParseException
 	{
-		observation.setInitiatedby( utilMethods.getLoggedInUser( ) );
+		observation.setInitiatedBy( utilMethods.getLoggedInUser( ) );
 		
 		/* lets upload file first. */
 		utilMethods.uploadFile( observation.getFile( ) );

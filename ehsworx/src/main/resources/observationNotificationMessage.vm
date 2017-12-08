@@ -1,0 +1,235 @@
+<html>
+<head>
+<style>
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.25;
+}
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+table tr {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+table th,
+table td {
+  padding: .625em;
+}
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+  table caption {
+    font-size: 1.3em;
+  }
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  table td:before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+</style>
+</head>
+<body>
+Dear ${initiatorName},
+<br><br>
+New observation is assigned for your action. Please access below:
+<br>
+	<table>
+  <caption>Summary of observation</caption>
+  <tbody>
+		<tbody>
+		<tr>
+			<td>
+				<b>Observation ID</b>
+			</td>
+			<td>
+				${obs_id}
+			</td>
+		</tr>
+		<tr style="{ background: grey; }">
+			<td>
+				<b>Date</b>
+			</td>
+			<td>
+				${observation.date}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Reference</b>
+			</td>
+			<td>
+				${observation.obsRef}
+			</td>
+		</tr>
+		<tr  style="{ background: grey; }">
+			<td>
+				<b>Location</b>
+			</td>
+			<td>
+				${observation.locations}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Area</b>
+			</td>
+			<td>
+				${observation.areas}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Department</b>
+			</td>
+			<td>
+				${observation.departments}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Who Observed</b>
+			</td>
+			<td>
+				${observation.whobsvd}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Entered On Behalf Of</b>
+			</td>
+			<td>
+				${observation.obsBehf}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Project</b>
+			</td>
+			<td>
+				${observation.project}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Company/Contact Info</b>
+			</td>
+			<td>
+				${observation.obsContctInfo}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Your Observation</b>
+			</td>
+			<td>
+				${observation.obsTxt}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Type of Observation</b>
+			</td>
+			<td>
+				${observation.shoc}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Classification</b>
+			</td>
+			<td>
+				${observation.classification}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Proposed Action</b>
+			</td>
+			<td>
+				${observation.propsdAction}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Responsible Manager</b>
+			</td>
+			<td>
+				${observation.responsibleManager}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Initiated By</b>
+			</td>
+			<td>
+				${initiatorName}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>Attachment</b>
+			</td>
+			<td>
+				<a href="http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/welcome/file?filename=${fileName}" >${fileName}</a>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+	<br><br>
+	Please open below link to responded to the assigned observation.
+	<br>
+	http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/welcome/action?name=${obs_id}
+	<br><br>
+	Best Regards,
+	<br>
+	OHSE Management Solution
+</body>
+</script>
+</html>

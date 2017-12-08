@@ -72,12 +72,24 @@
 			</div>
 		</div>
 		<div class="form-group row">
+                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
+                <div class="col-sm-10">
+                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project" disabled="true"/>
+                </div>
+            </div>
+		<div class="form-group row">
 			<label for="inputst" class="col-sm-2 col-form-label">Location</label>
 			<div class="col-sm-10">
 				<form:select path="locations" items="${locationList}"
 					multiple="false" class="form-control" disabled="true"/>
 			</div>
 		</div>
+		<div class="form-group row">
+                <label for="inputst" class="col-sm-2 col-form-label">Area&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
+				<div class="col-sm-10">
+					<form:select path="areas" items="${areaList}" multiple="false" class="form-control" disabled="true"/>
+				</div>
+			</div>
 		<div class="form-group row">
 			<label for="inputvess" class="col-sm-2 col-form-label">Department</label>
 			<div class="col-sm-10">
@@ -101,12 +113,7 @@
 					id="inputobeh" placeholder="Enter On Behalf Of" disabled="true"/>
 			</div>
 		</div>
-		<div class="form-group row">
-                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
-                <div class="col-sm-10">
-                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project" disabled="true"/>
-                </div>
-            </div>
+		
 		<div class="form-group row">
 			<label for="inputinfo" class="col-sm-2 col-form-label">Company/Contact
 				Info</label>
@@ -124,7 +131,7 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<label for="inputcard" class="col-sm-2 col-form-label">Observation Type</label>
+			<label for="inputcard" class="col-sm-2 col-form-label">Type of Observation</label>
 			<div class="col-sm-10">
 				<form:select path="shoc" items="${shocList}" multiple="false"
 					class="form-control" disabled="true"/>
@@ -139,7 +146,7 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<label for="inputAct" class="col-sm-2 col-form-label">Your
+			<label for="inputAct" class="col-sm-2 col-form-label">
 				Proposed Action</label>
 			<div class="col-sm-10">
 				<form:textarea path="actionsList[0].actionTxt" class="form-control"

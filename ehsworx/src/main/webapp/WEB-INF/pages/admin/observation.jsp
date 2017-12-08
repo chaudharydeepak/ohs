@@ -50,9 +50,21 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
+                <div class="col-sm-10">
+                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project"/>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="inputst" class="col-sm-2 col-form-label">Location</label>
 				<div class="col-sm-10">
 					<form:select path="locations" items="${locationList}" multiple="false" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group row">
+                <label for="inputst" class="col-sm-2 col-form-label">Area&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
+				<div class="col-sm-10">
+					<form:select path="areas" items="${areaList}" multiple="false" class="form-control"/>
 				</div>
 			</div>
             <div class="form-group row">
@@ -74,12 +86,7 @@
                     <form:input path="obsBehf" type="text" class="form-control" id="inputobeh" placeholder="Enter On Behalf Of"/>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
-                <div class="col-sm-10">
-                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project"/>
-                </div>
-            </div>
+            
             <div class="form-group row">
                 <label for="inputinfo" class="col-sm-2 col-form-label">Company/Contact Info</label>
                 <div class="col-sm-10">
@@ -131,7 +138,7 @@
                 </div>    
             </div>
             <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="file">Upload Attachements</label>
+                    <label class="col-sm-2 col-form-label" for="file">Upload Attachment</label>
                     <div class="col-sm-10">
                         <form:input type="file" path="file" id="file" class="form-control input-sm"/>
                     </div>

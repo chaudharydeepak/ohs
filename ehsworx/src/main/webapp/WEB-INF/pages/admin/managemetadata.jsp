@@ -149,9 +149,10 @@ $(function(){
         source: [
             {value: 'location', text: 'location'},
             {value: 'department', text: 'department'},
-            {value: 'obeservertype', text: 'obeservertype'},
-            {value: 'shoc', text: 'shoc'},
-            {value: 'classification', text: 'classification'}
+            {value: 'who_observed', text: 'who_observed'},
+            {value: 'type_of_observation', text: 'type_of_observation'},
+            {value: 'classification', text: 'classification'},
+            {value: 'areas', text: 'areas'}
         ],
         display: function(value, sourceData) {
              var colors = {"": "gray", 1: "green", 2: "blue"},

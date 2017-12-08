@@ -37,6 +37,9 @@ insert into app.EHS_SECURITY_USERAUTHORITY values (
 'chaudharydeepak08@gmail.com',
 'ROLE_ADMIN');
 
+
+delete from app.obervationsMetadata;
+
 create table app.obervationsMetadata( id int not null, meta_key varchar(100) not null, meta_value varchar(200) not null , active boolean);
 ALTER TABLE APP.obervationsMetadata
 ADD PRIMARY KEY(meta_key,meta_value);
@@ -47,15 +50,23 @@ insert into app.obervationsMetadata values ( 3, 'location','location_3',true);
 insert into app.obervationsMetadata values ( 4, 'department','department_1',true);
 insert into app.obervationsMetadata values ( 5, 'department','department_2',true);
 insert into app.obervationsMetadata values ( 6, 'department','department_3',true);
-insert into app.obervationsMetadata values ( 7, 'obeservertype','obeservertype_1',true);
-insert into app.obervationsMetadata values ( 8, 'obeservertype','obeservertype_2',true);
-insert into app.obervationsMetadata values ( 9, 'obeservertype','obeservertype_3',true);
-insert into app.obervationsMetadata values ( 10, 'shoc','shoc_1',true);
-insert into app.obervationsMetadata values ( 11, 'shoc','shoc_2',true);
-insert into app.obervationsMetadata values ( 12, 'shoc','shoc_3',true);
+insert into app.obervationsMetadata values ( 7, 'who_observed','obeservertype_1',true);
+insert into app.obervationsMetadata values ( 8, 'who_observed','obeservertype_2',true);
+insert into app.obervationsMetadata values ( 9, 'who_observed','obeservertype_3',true);
+insert into app.obervationsMetadata values ( 10, 'type_of_observation','shoc_1',true);
+insert into app.obervationsMetadata values ( 11, 'type_of_observation','shoc_2',true);
+insert into app.obervationsMetadata values ( 12, 'type_of_observation','shoc_3',true);
 insert into app.obervationsMetadata values ( 13, 'classification','classification_1',true);
 insert into app.obervationsMetadata values ( 14, 'classification','classification_2',true);
 insert into app.obervationsMetadata values ( 15, 'classification','classification_3',true);
+
+select * from app.obervationsMetadata;
+
+insert into app.obervationsMetadata values ( 16, 'areas','area_1',true);
+insert into app.obervationsMetadata values ( 17, 'areas','area_2',true);
+insert into app.obervationsMetadata values ( 18, 'areas','area_3',true);
+
+delete from app.obervationsMetadata where meta_key = 'Areas'
 
 CREATE SEQUENCE app.observation_number_id
 AS INT
@@ -86,6 +97,8 @@ alter table app.ObservationMaster add obs_date date;
 alter table app.ObservationMaster add project varchar(500);
 
 alter table app.ObservationMaster add actiontxt varchar(500);
+
+alter table app.ObservationMaster add area varchar(100);
 
 CREATE table app.ObservationActions (
 obs_id int not null,
@@ -124,4 +137,9 @@ select * from app.ObservationMaster
 
 select respMgr from app.ObservationMaster where obs_id=216
 
-update APP.ObservationMaster set status = 'Assigned', active = true where obs_id = 224
+update APP.ObservationMaster set status = 'Assigned', active = true where obs_id = 224;
+
+app.ObservationMaster
+
+
+select FIRST_NAME || ' ' || LAST_NAME  user from app.EHS_SECURITY_USERPROFILE

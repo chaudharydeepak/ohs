@@ -15,6 +15,7 @@ public class Observation
 	String				obsContctInfo;
 	String				obsTxt;
 	String				locations;
+	String				areas;
 	String				propsdAction;
 	String				status;
 	String				active;
@@ -44,7 +45,7 @@ public class Observation
 	
 	Date				created_dt;
 	
-	String				initiatedby;
+	/*String				initiatedby;*/
 	
 	String				operationType;
 	
@@ -241,7 +242,7 @@ public class Observation
 		this.date = date;
 	}
 	
-	public String getInitiatedby ( )
+	/*public String getInitiatedby ( )
 	{
 		return initiatedby;
 	}
@@ -249,7 +250,7 @@ public class Observation
 	public void setInitiatedby ( String initiatedby )
 	{
 		this.initiatedby = initiatedby;
-	}
+	}*/
 	
 	public String getPropsdAction_2 ( )
 	{
@@ -359,5 +360,15 @@ public class Observation
 	public void setAttachList ( List< Attachment > attachList )
 	{
 		this.attachList = attachList;
+	}
+
+	public String getAreas()
+	{
+		return areas;
+	}
+
+	public void setAreas(String areas)
+	{
+		this.areas = areas;
 	}
 }

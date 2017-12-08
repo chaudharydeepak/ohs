@@ -141,14 +141,15 @@ public class ApplicationController
 		
 		model.addAttribute( "locationList", metaDataMap.get( "location" ) );
 		model.addAttribute( "departmentList", metaDataMap.get( "department" ) );
-		model.addAttribute( "obeservertypeList", metaDataMap.get( "obeservertype" ) );
-		model.addAttribute( "shocList", metaDataMap.get( "shoc" ) );
+		model.addAttribute( "obeservertypeList", metaDataMap.get( "who_observed" ) );
+		model.addAttribute( "shocList", metaDataMap.get( "type_of_observation" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
 		
 		Observation retreivedObs = ehsHelper.loadObservation( obsId );
 		
 		model.addAttribute( "attachList", retreivedObs.getAttachList( ) );
+		model.addAttribute( "areaList", metaDataMap.get( "areas" ) );
 		model.addAttribute( "status", retreivedObs.getStatus( ) );
 		model.addAttribute( "observation", retreivedObs );
 		return "observation_action";
@@ -171,12 +172,13 @@ public class ApplicationController
 		
 		model.addAttribute( "locationList", metaDataMap.get( "location" ) );
 		model.addAttribute( "departmentList", metaDataMap.get( "department" ) );
-		model.addAttribute( "obeservertypeList", metaDataMap.get( "obeservertype" ) );
-		model.addAttribute( "shocList", metaDataMap.get( "shoc" ) );
+		model.addAttribute( "obeservertypeList", metaDataMap.get( "who_observed" ) );
+		model.addAttribute( "shocList", metaDataMap.get( "type_of_observation" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
 		/** set current logged-in user as initiatedByUser Field on UI. **/
 		model.addAttribute( "initatedByUser", ehsHelper.getLoggedInUserWrapper( ) );
+		model.addAttribute( "areaList", metaDataMap.get( "areas" ) );
 		model.addAttribute( "observation", new Observation( ) );
 		
 		return "admin/observation";
@@ -240,15 +242,17 @@ public class ApplicationController
 		
 		model.addAttribute( "locationList", metaDataMap.get( "location" ) );
 		model.addAttribute( "departmentList", metaDataMap.get( "department" ) );
-		model.addAttribute( "obeservertypeList", metaDataMap.get( "obeservertype" ) );
-		model.addAttribute( "shocList", metaDataMap.get( "shoc" ) );
+		model.addAttribute( "obeservertypeList", metaDataMap.get( "who_observed" ) );
+		model.addAttribute( "shocList", metaDataMap.get( "type_of_observation" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
+		model.addAttribute( "initatedByUser", ehsHelper.getLoggedInUserWrapper( ) );
+		model.addAttribute( "areaList", metaDataMap.get( "areas" ) );
+		
 		if ( null != msg && msg.trim( ).length( ) > 0 )
 			model.addAttribute( "msg", msg );
 		
 		Observation retreivedObs = ehsHelper.loadObservation( obsId );
-		
 		model.addAttribute( "attachList", retreivedObs.getAttachList( ) );
 		model.addAttribute( "observation", retreivedObs );
 		

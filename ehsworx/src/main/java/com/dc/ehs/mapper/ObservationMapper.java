@@ -15,7 +15,7 @@ public class ObservationMapper implements RowMapper< Observation >
 		
 		_obs.setObsID( String.valueOf( arg0.getInt( "obs_id" ) ) );
 		// _obs.setObsTxt(arg0.getString("obsTxt"));
-		_obs.setInitiatedby( arg0.getString( "initiatedBy" ) );
+		_obs.setInitiatedBy( arg0.getString( "initiatedBy" ) );
 		_obs.setResponsibleManager( arg0.getString( "respMgr" ) );
 		_obs.setActive( String.valueOf( arg0.getBoolean( "active" ) ) );
 		_obs.setStatus( arg0.getString( "status" ) );
@@ -25,7 +25,7 @@ public class ObservationMapper implements RowMapper< Observation >
 		_obs.setClassification( arg0.getString( "classification" ) );
 		_obs.setDepartments( arg0.getString( "department" ) );
 		_obs.setObsBehf( arg0.getString( "behalfOf" ) );
-		_obs.setInitiatedby( arg0.getString( "initiatedBy" ) );
+		//_obs.setInitiatedby( arg0.getString( "initiatedBy" ) );
 		_obs.setObsContctInfo( arg0.getString( "contact_info" ) );
 		_obs.setObsTxt( arg0.getString( "obsTxt" ) );
 		_obs.setDate( String.valueOf( arg0.getDate( "obs_date" ) ) );
@@ -35,6 +35,8 @@ public class ObservationMapper implements RowMapper< Observation >
 		_obs.setInitrLname( arg0.getString( "last_name" ) );
 		_obs.setShoc( arg0.getString( "shoc" ) );
 		_obs.setActionComments( arg0.getString( "actiontxt" ) );
+		_obs.setAreas(arg0.getString( "area" ));
+		_obs.setWhobsvd(arg0.getString( "observrtype" ));
 		// _obs.setPropsdAction(arg0.getString("reference"));
 		return _obs;
 	}
