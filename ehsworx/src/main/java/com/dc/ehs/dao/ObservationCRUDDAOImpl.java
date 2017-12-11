@@ -146,7 +146,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			namedParameters.put("username", observation.getInitiatedBy());
 			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters, String.class);
 			
-			emailService.sendMail("chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action/ Classification/"+obs_id,
+			emailService.sendMail("chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action/" + observation.getClassification( ) + "/ "+obs_id,
 				 observation, observation.getFile().getOriginalFilename() ,  obs_id , initiatorName);
 
 		} else

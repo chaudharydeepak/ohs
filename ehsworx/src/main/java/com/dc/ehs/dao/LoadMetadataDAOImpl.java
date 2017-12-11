@@ -128,7 +128,7 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		String _SQL4Meta = "update app.obervationsMetadata set active=false where meta_key=:meta_key and id=:id";
 		Map< String, Object > namedParameters = new HashMap< String, Object >( );
 		metaDataList.forEach( metaobj -> {
-			String meta[] = metaobj.split( "_" );
+			String meta[] = metaobj.split( "~" );
 			namedParameters.put( "id", meta[ 0 ] );
 			namedParameters.put( "meta_key", meta[ 1 ] );
 			namedParameterJdbcTemplate.update( _SQL4Meta, namedParameters );

@@ -41,9 +41,9 @@
 
 			<c:forEach items="${metaData}" var="mdtaobj">
 				<tr>
-					<td><input type="checkbox" class="mycheckboxes" id="checkBox_${mdtaobj.id}_${mdtaobj.type}"></td>
+					<td><input type="checkbox" class="mycheckboxes" id="checkBox~${mdtaobj.id}~${mdtaobj.type}"></td>
     					<td>${mdtaobj.type}</td>
-					<td><a href="#" id="metas_${mdtaobj.id}_${mdtaobj.type}"
+					<td><a href="#" id="metas~${mdtaobj.id}~${mdtaobj.type}"
 						data-type="text"
 						data-url="/ehsworx/welcome/saveMetaData?${_csrf.parameterName}=${_csrf.token}"
 						data-pk="2">${mdtaobj.value}</a></td>
@@ -92,7 +92,7 @@ $( document ).ready(function() {
 	    }
 	});
 	$.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>' ;
-	$("[id^=metas_]").editable();
+	$("[id^=metas]").editable();
 
     //make value required
     $('#new_value').editable('option', 'validate', function(v) {
@@ -132,7 +132,7 @@ $( document ).ready(function() {
     //delete item line
          $('#delete-btn').click(function() {
          var checkBoxes = $('.mycheckboxes:checked').map(function() {
-    			return this.id.replace("checkBox_", "");
+    			return this.id.replace("checkBox~", "");
 			}).get();
          console.log( checkBoxes );
           $.ajax({

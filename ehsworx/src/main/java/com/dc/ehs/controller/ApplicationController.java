@@ -456,12 +456,12 @@ public class ApplicationController
 		HttpHeaders responseHeaders = new HttpHeaders( );
 		String metaInfo = "";
 		String valueToSet = "";
-		String replaceString = "metas_";
+		String replaceString = "metas~";
 		
 		metaInfo = ( formParams.get( "name" ).get( 0 ) ).replaceAll( replaceString, "" );
 		valueToSet = formParams.get( "value" ).get( 0 );
 		
-		String MetaInfoArry[] = metaInfo.split( "_" );
+		String MetaInfoArry[] = metaInfo.split( "~" );
 		
 		if ( null != MetaInfoArry && MetaInfoArry.length > 1 )
 		{
