@@ -25,7 +25,7 @@
 <body style="font-family: 'Open Sans', sans-serif; padding-top: 70px;">
 	<%@include file="../header.jsp"%>
 	<br>
-<body>
+<body>      
 	<div style="left:10%;">
 	<span style="width: 40%;position: absolute;left:10%;color:gray;"><i class="fa fa-drivers-license-o" style="font-size:20px;color:green"></i><b>&nbsp;MetaData Maintainence Form</b></span>
 	<br>

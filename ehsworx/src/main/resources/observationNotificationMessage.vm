@@ -76,7 +76,7 @@ table th {
 </style>
 </head>
 <body>
-Dear ${initiatorName},
+Dear ${respManagerName},
 <br><br>
 New observation is assigned for your action. Please access below:
 <br>

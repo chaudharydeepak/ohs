@@ -137,17 +137,17 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 
 			/* Lets send email */
 
-			String respManager = (observation.getResponsibleManager().split("\\(")[1]).replace(")", "");
-			LOGGER.info("updated notification for " + respManager);
-			LOGGER.info("updated observation.getInitiatedBy() for " + 	observation.getInitiatedBy());
+			String respManagerAry[] = observation.getResponsibleManager().split("\\(");
+			String respManagerEmail = (respManagerAry[1]).replace(")", "");
+			LOGGER.info("updated notification for " + respManagerEmail);
 			String fetchInitiatorName = "select FIRST_NAME || ' ' || LAST_NAME from app.EHS_SECURITY_USERPROFILE where username=:username";
-			
+			String respManagerName = respManagerAry[0] ;
 			namedParameters = new HashMap<String, Object>();
 			namedParameters.put("username", observation.getInitiatedBy());
 			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters, String.class);
 			
-			emailService.sendMail("chaudharydeepak08@gmail.com", respManager, "Observation assigned for your action/" + observation.getClassification( ) + "/ "+obs_id,
-				 observation, observation.getFile().getOriginalFilename() ,  obs_id , initiatorName);
+			emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail, "Observation assigned for your action/" + observation.getClassification( ) + "/ "+obs_id,
+				 observation, observation.getFile().getOriginalFilename() ,  obs_id , initiatorName, respManagerName);
 
 		} else
 		{

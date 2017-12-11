@@ -56,7 +56,7 @@ public class EmailService
 	 * @param msg
 	 * @throws MessagingException
 	 */
-	public void sendMail(String from, String to, String subject, Observation observation, String fileName, int obs_id, String initiatorName)
+	public void sendMail(String from, String to, String subject, Observation observation, String fileName, int obs_id, String initiatorName, String respManagerName)
 			throws MessagingException
 	{
 
@@ -85,6 +85,7 @@ public class EmailService
 				model.put("fileName", fileName);
 				model.put("obs_id", obs_id);
 				model.put("initiatorName", initiatorName);
+				model.put("respManagerName", respManagerName);
 				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
 						"observationNotificationMessage.vm", "UTF-8", model);
 				message.setText(text, true);
