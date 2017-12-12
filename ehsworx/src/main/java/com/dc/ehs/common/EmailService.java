@@ -1,5 +1,7 @@
 package com.dc.ehs.common;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -79,6 +82,9 @@ public class EmailService
 				message.setFrom(from);
 				message.setSubject(subject);
 				message.setSentDate(new Date());
+				
+				FileSystemResource res = new FileSystemResource(new File("/resources/img/logo-cover.png"));
+				
 				Map model = new HashMap();
 				
 				model.put("observation", observation);
@@ -86,6 +92,7 @@ public class EmailService
 				model.put("obs_id", obs_id);
 				model.put("initiatorName", initiatorName);
 				model.put("respManagerName", respManagerName);
+				model.put("logo", res);
 				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
 						"observationNotificationMessage.vm", "UTF-8", model);
 				message.setText(text, true);
