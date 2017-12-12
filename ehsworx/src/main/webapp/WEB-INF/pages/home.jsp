@@ -62,10 +62,10 @@
 					</c:otherwise>
 					</c:choose>
 					</td>
-					<td><a href="<c:url value="/welcome/admin/loadObs?name="/>${obs.obsID}">
-						<i class="fa fa-edit" style="color:red"></i></a>
-						<a id="deleteObs_${obs.obsID}" href="#"><i class="fa fa-remove" style="color:red"></i></a>
-						<a href="<c:url value="/welcome/action?name="/>${obs.obsID}">
+					<td><a href="<c:url value="/welcome/admin/loadObs?name="/>${obs.obsID}" data-toggle="ed_et" title="Edit">
+						<i class="fa fa-edit" style="color:red"></i></a>&nbsp;
+						<a id="deleteObs_${obs.obsID}" href="#" data-toggle="ed_dt" title="Delete"><i class="fa fa-remove" style="color:red"></i></a>&nbsp;
+						<a href="<c:url value="/welcome/action?name="/>${obs.obsID}" data-toggle="ed_at" title="Action">
 						<i class="fa fa-cogs" style="color:red"></i></a>
 						</td> 
 				</tr>
@@ -90,6 +90,9 @@ $( document ).ready(function() {
 		}
 		});
 	});
+	$('[data-toggle="ed_et"]').tooltip(); 
+	$('[data-toggle="ed_dt"]').tooltip(); 
+	$('[data-toggle="ed_at"]').tooltip(); 
 });
 </script>
 </html>

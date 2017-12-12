@@ -169,7 +169,7 @@
 					<url>http://localhost:8080/manager/text</url>
 					<server>TomcatServer</server>
 					<path>/ehsworx</path>
-				</configuration>-->
+				</configuration> -->
 				<configuration> <url>http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/manager/text</url> 
 					<server>awsTomcatServer</server> <path>/ehsworx</path> </configuration> 
 			</plugin>

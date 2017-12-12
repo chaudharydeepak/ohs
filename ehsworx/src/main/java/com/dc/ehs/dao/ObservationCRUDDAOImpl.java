@@ -149,7 +149,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 					String.class);
 
 			emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail,
-					"Observation assigned for your action/" + observation.getClassification() + "/ " + obs_id,
+					"Observation assigned for your action/" + observation.getClassification() + "/" + obs_id,
 					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);
 
 		} else

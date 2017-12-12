@@ -223,14 +223,25 @@ New observation is assigned for your action. Please access below:
 	</tbody>
 	</table>
 	<br><br>
-	Please open below link to responded to the assigned observation.
+	Please open below link to respond to the assigned observation:
 	<br>
 	http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/welcome/action?name=${obs_id}
-	<br><br>
+	<br><br><br>
 	Best Regards,
 	<br>
-	OHSE Management Solution
-	<img src='cid:logo' border="0"/>
+	OHSE Management System
+	<br>
+	<img src="http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/ehsworx/resources/img/email_logo.png" border="0"/>
+	<hr>
+	<div>
+		<span style="color:gray;font-size:10px;">
+			This is an automatically generated email. Do not use the 'REPLY' button as your email will not be received and will be returned to you by the mail server.
+			<br>
+			You have received this email because you are a user of OHSE management system.
+		</span>	
+		<hr>
+		<span style="color:green;font-size:8px;">Help to preserve the environment: Do you really need to print this email?</span>
+	</div>
 </body>
 </script>
 </html>
