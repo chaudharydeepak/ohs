@@ -70,14 +70,15 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			_SQL = "insert into app.ObservationMaster ( obs_id, \n" + "status,\n" + "active,\n" + "reference,  \n"
 					+ "location, \n" + "department, \n" + "observrType, \n" + "behalfOf,\n" + "contact_info, \n"
 					+ "shoc, \n" + "classification, \n" + "obsTxt,\n" + "respMgr, \n" + "initiatedBy, \n"
-					+ "creatd_dt, \n" + "creatd_by, obs_date, project, area) values (" + obs_id + ",\n" + "'Assigned'" + ",\n"
-					+ "'true'" + ",\n" + "'" + observation.getObsRef() + "',\n" + "'" + observation.getLocations()
-					+ "',\n" + "'" + observation.getDepartments() + "',\n" + "'" + observation.getWhobsvd() + "',\n"
-					+ "'" + observation.getObsBehf() + "',\n" + "'" + observation.getObsContctInfo() + "',\n" + "'"
-					+ observation.getShoc() + "',\n" + "'" + observation.getClassification() + "',\n" + "'"
-					+ observation.getObsTxt() + "',\n" + "'" + observation.getResponsibleManager() + "',\n" + "'"
-					+ observation.getInitiatedBy() + "', CURRENT_DATE ,\n" + "'" + observation.getInitiatedBy() + "','"
-					+ observation.getDate() + "','" + observation.getProject() + "','" + observation.getAreas() + "')";
+					+ "creatd_dt, \n" + "creatd_by, obs_date, project, area) values (" + obs_id + ",\n" + "'Assigned'"
+					+ ",\n" + "'true'" + ",\n" + "'" + observation.getObsRef() + "',\n" + "'"
+					+ observation.getLocations() + "',\n" + "'" + observation.getDepartments() + "',\n" + "'"
+					+ observation.getWhobsvd() + "',\n" + "'" + observation.getObsBehf() + "',\n" + "'"
+					+ observation.getObsContctInfo() + "',\n" + "'" + observation.getShoc() + "',\n" + "'"
+					+ observation.getClassification() + "',\n" + "'" + observation.getObsTxt() + "',\n" + "'"
+					+ observation.getResponsibleManager() + "',\n" + "'" + observation.getInitiatedBy()
+					+ "', CURRENT_DATE ,\n" + "'" + observation.getInitiatedBy() + "','" + observation.getDate() + "','"
+					+ observation.getProject() + "','" + observation.getAreas() + "')";
 
 			jdbcTemplate.update(_SQL);
 
@@ -141,13 +142,15 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			String respManagerEmail = (respManagerAry[1]).replace(")", "");
 			LOGGER.info("updated notification for " + respManagerEmail);
 			String fetchInitiatorName = "select FIRST_NAME || ' ' || LAST_NAME from app.EHS_SECURITY_USERPROFILE where username=:username";
-			String respManagerName = respManagerAry[0] ;
+			String respManagerName = respManagerAry[0];
 			namedParameters = new HashMap<String, Object>();
 			namedParameters.put("username", observation.getInitiatedBy());
-			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters, String.class);
-			
-			emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail, "Observation assigned for your action/" + observation.getClassification( ) + "/ "+obs_id,
-				 observation, observation.getFile().getOriginalFilename() ,  obs_id , initiatorName, respManagerName);
+			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters,
+					String.class);
+
+			emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail,
+					"Observation assigned for your action/" + observation.getClassification() + "/ " + obs_id,
+					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);
 
 		} else
 		{
@@ -280,6 +283,35 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			fetchAllObservations = fetchAllObservations + " and respMgr like '%" + username + "%'";
 		}
 		obsList = namedParameterJdbcTemplate.query(fetchAllObservations, new ObservationMapper());
+
+		Map<String, Object> namedParameters = new HashMap<String, Object>();
+
+		obsList.forEach(item ->
+		{
+
+			if (null != item)
+			{
+				/* fetch actions */
+				String fetchActions = "Select * from app.ObservationActions where obs_id=:obsid";
+				namedParameters.put("obsid", Integer.valueOf(item.getObsID()));
+				List<Actions> actionList = namedParameterJdbcTemplate.query(fetchActions, namedParameters,
+						new ActionMapper());
+
+				if (null != actionList && !actionList.isEmpty())
+					item.setActionsList(actionList);
+
+				/*
+				 * fetch attacments String fetchAttach =
+				 * "Select * from app.ObservationAttachmnts where obs_id=:obsid";
+				 * List<Attachment> attachList = namedParameterJdbcTemplate.query(fetchAttach,
+				 * namedParameters, new AttachmentMapper());
+				 * 
+				 * if (null != attachList && !attachList.isEmpty()) {
+				 * LOGGER.info("##################setting attachment --> " + attachList.size());
+				 * item.setAttachList(attachList); }
+				 */
+			}
+		});
 		return obsList;
 	}
 

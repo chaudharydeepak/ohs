@@ -50,9 +50,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputobeh" class="col-sm-2 col-form-label">Project</label>
+                <label for="inputobeh" class="col-sm-2 col-form-label">Project&nbsp;<i class="fa fa-asterisk" style="font-size:10px;color:red"></i></label>
                 <div class="col-sm-10">
-                    <form:input path="project" type="text" class="form-control" id="projectid" placeholder="Project"/>
+                    <form:select path="project" items="${projectsList}" multiple="false" class="form-control"/>
                 </div>
             </div>
             <div class="form-group row">

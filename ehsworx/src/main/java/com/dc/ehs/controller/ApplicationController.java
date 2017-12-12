@@ -145,6 +145,7 @@ public class ApplicationController
 		model.addAttribute( "shocList", metaDataMap.get( "type_of_observation" ) );
 		model.addAttribute( "classificationList", metaDataMap.get( "classification" ) );
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
+		model.addAttribute( "projectsList", metaDataMap.get( "projects" ) );
 		
 		Observation retreivedObs = ehsHelper.loadObservation( obsId );
 		
@@ -179,6 +180,7 @@ public class ApplicationController
 		/** set current logged-in user as initiatedByUser Field on UI. **/
 		model.addAttribute( "initatedByUser", ehsHelper.getLoggedInUserWrapper( ) );
 		model.addAttribute( "areaList", metaDataMap.get( "areas" ) );
+		model.addAttribute( "projectsList", metaDataMap.get( "projects" ) );
 		model.addAttribute( "observation", new Observation( ) );
 		
 		return "admin/observation";
@@ -248,6 +250,7 @@ public class ApplicationController
 		model.addAttribute( "respManagerList", metaDataMap.get( "responsibleUser" ) );
 		model.addAttribute( "initatedByUser", ehsHelper.getLoggedInUserWrapper( ) );
 		model.addAttribute( "areaList", metaDataMap.get( "areas" ) );
+		model.addAttribute( "projectsList", metaDataMap.get( "projects" ) );
 		
 		if ( null != msg && msg.trim( ).length( ) > 0 )
 			model.addAttribute( "msg", msg );

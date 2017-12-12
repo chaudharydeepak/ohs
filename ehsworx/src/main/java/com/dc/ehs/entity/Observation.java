@@ -43,6 +43,8 @@ public class Observation
 	
 	String				date;
 	
+	String				last_mdfd_date;
+	
 	Date				created_dt;
 	
 	/*String				initiatedby;*/
@@ -370,5 +372,15 @@ public class Observation
 	public void setAreas(String areas)
 	{
 		this.areas = areas;
+	}
+
+	public String getLast_mdfd_date()
+	{
+		return last_mdfd_date;
+	}
+
+	public void setLast_mdfd_date(String last_mdfd_date)
+	{
+		this.last_mdfd_date = last_mdfd_date;
 	}
 }

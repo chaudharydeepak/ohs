@@ -37,6 +37,7 @@ public class ObservationMapper implements RowMapper< Observation >
 		_obs.setActionComments( arg0.getString( "actiontxt" ) );
 		_obs.setAreas(arg0.getString( "area" ));
 		_obs.setWhobsvd(arg0.getString( "observrtype" ));
+		_obs.setLast_mdfd_date(String.valueOf(arg0.getDate( "modfd_dt" )));
 		// _obs.setPropsdAction(arg0.getString("reference"));
 		return _obs;
 	}

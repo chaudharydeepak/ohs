@@ -66,6 +66,10 @@ insert into app.obervationsMetadata values ( 16, 'areas','area_1',true);
 insert into app.obervationsMetadata values ( 17, 'areas','area_2',true);
 insert into app.obervationsMetadata values ( 18, 'areas','area_3',true);
 
+insert into app.obervationsMetadata values ( 20, 'project','project_1',true);
+insert into app.obervationsMetadata values ( 21, 'project','project_2',true);
+insert into app.obervationsMetadata values ( 22, 'project','project_3',true);
+
 delete from app.obervationsMetadata where meta_key = 'Areas'
 
 CREATE SEQUENCE app.observation_number_id
@@ -139,7 +143,7 @@ select respMgr from app.ObservationMaster where obs_id=216
 
 update APP.ObservationMaster set status = 'Assigned', active = true where obs_id = 224;
 
-app.ObservationMaster
+select * from app.ObservationActions
 
 
 select FIRST_NAME || ' ' || LAST_NAME  user from app.EHS_SECURITY_USERPROFILE

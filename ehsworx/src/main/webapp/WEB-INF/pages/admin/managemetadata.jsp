@@ -152,7 +152,8 @@ $(function(){
             {value: 'who_observed', text: 'who_observed'},
             {value: 'type_of_observation', text: 'type_of_observation'},
             {value: 'classification', text: 'classification'},
-            {value: 'areas', text: 'areas'}
+            {value: 'areas', text: 'areas'},
+            {value: 'project', text: 'project'}
         ],
         display: function(value, sourceData) {
              var colors = {"": "gray", 1: "green", 2: "blue"},

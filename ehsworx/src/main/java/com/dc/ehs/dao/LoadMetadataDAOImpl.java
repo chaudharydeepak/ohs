@@ -63,6 +63,9 @@ public class LoadMetadataDAOImpl implements LoadMetadataDAO
 		_sql = "select meta_value from app.obervationsMetadata where meta_key='areas' and active = true";
 		metaDataMap.put( "areas", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );
 		
+		_sql = "select meta_value from app.obervationsMetadata where meta_key='project' and active = true";
+		metaDataMap.put( "projects", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );
+		
 		_sql = "select first_name || ' ' || last_name || '(' || p.username || ')' as meta_value from app.EHS_SECURITY_USERPROFILE p ,\n"
 		        + "app.EHS_SECURITY_USERAUTHORITY a where p.username = a.username\n" + "and p.active= true";
 		metaDataMap.put( "responsibleUser", jdbcTemplate.query( _sql, new MetaDataMapper( ) ) );

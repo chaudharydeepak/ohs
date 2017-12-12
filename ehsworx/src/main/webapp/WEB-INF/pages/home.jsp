@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -15,28 +16,52 @@
 <script src="<c:url value="https://code.jquery.com/jquery-1.11.3.min.js" />"></script>
 </head>
 
-<body style="font-family: 'Open Sans', sans-serif;padding-top: 70px;">	
+<body style="font-family:Arial,Verdana,sans-serif;padding-top: 70px;">	
 <%@include file="header.jsp" %>
-<table class="table table-bordered table-striped" align="center" style="width:90%">
+<table class="table table-bordered table-striped" align="center" style="width:98%;font-family:Arial,Verdana,sans-serif;font-size:13px;">
 		<thead>
 			<tr>
-				<th>Observation ID</th>
-				<th>Type of Observation</th>
+				<th>Observation</th>
+				<th>Reference</th>
+				<th>Project</th>
+				<th>Location</th>
+				<th>Area</th>
+				<th>Observation</th>
+				<th>Who Observed</th>
 				<th>Initiated By</th>
+				<th>Proposed Action</th>
 				<th>Responsible Manager</th>
 				<th>Status</th>
+				<th>Closed Date</th>
 				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 
 			<c:forEach items="${observationList}" var="obs">
+			<c:set var="respMgrParts" value="${fn:split(obs.responsibleManager, '(')}" />
 				<tr>
 					<td>${obs.obsID}</td>
-					<td>${obs.shoc}</td>
+					<td>${obs.obsRef}</td>
+					<td>${obs.project}</td>
+					<td>${obs.locations}</td>
+					<td>${obs.areas}</td>
+					<td>${fn:substring(obs.obsTxt, 0, 10)}...</td>
+					<td>${obs.whobsvd}</td>
 					<td>${obs.initrFname} ${obs.initrLname}</td>
-					<td>${obs.responsibleManager}</td>
+					<td>${fn:substring(obs.actionsList[0].actionTxt, 0, 10)}...</td>
+					<td>${respMgrParts[0]}</td>
 					<td>${obs.status}</td>
+					<td>
+					<c:choose>
+					<c:when test="${obs.status == 'Completed'}">
+						${obs.last_mdfd_date}
+					</c:when>
+					<c:otherwise>
+						_
+					</c:otherwise>
+					</c:choose>
+					</td>
 					<td><a href="<c:url value="/welcome/admin/loadObs?name="/>${obs.obsID}">
 						<i class="fa fa-edit" style="color:red"></i></a>
 						<a id="deleteObs_${obs.obsID}" href="#"><i class="fa fa-remove" style="color:red"></i></a>
