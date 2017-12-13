@@ -13,7 +13,7 @@ body {
   margin: 0 auto;
   background-color: #fff;
   border: 2px solid rgba(0,0,0,0.1);  
-  border-color: greenyellow;
+  border-color: #1BB05A;
 
   .form-signin-heading,
 	.checkbox {
