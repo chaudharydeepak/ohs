@@ -11,16 +11,16 @@
 		">
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="in-v3.mailjet.com" />
-		<property name="port" value="587" />
-		<property name="username" value="f1ccb1416b17a16f47f264b38ac56d2b" />
-		<property name="password" value="03b4e762b728b957053fccc7741200dc" />
+		<property name="host" value="${email.host}" />
+		<property name="port" value="${email.port}" />
+		<property name="username" value="${email.username}" />
+		<property name="password" value="${email.password}" />
 
 		<property name="javaMailProperties">
 			<props>
-				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.auth">${email.auth}</prop>
+				<prop key="mail.smtp.starttls.enable">${email.starttls}</prop>
+				<prop key="mail.debug">${email.debug}</prop>
 			</props>
 		</property>
 	</bean>

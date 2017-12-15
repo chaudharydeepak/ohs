@@ -8,17 +8,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>EHS Home</title>
 <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
-<link
-	href="<c:url value='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' />"
-	rel="stylesheet"></link>
-<script
-	src="<c:url value="http://code.jquery.com/jquery-2.0.3.min.js" />"></script>
-<link href="<c:url value='/resources/css/bootstrap.min.css' />"
-	rel="stylesheet"></link>
-<script
-	src="<c:url value='http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js' />"></script>
-<link href="<c:url value='/resources/css/bootstrap-editable.css' />"
-	rel="stylesheet"></link>
+<link href="<c:url value='/resources/css/font-awesome.min.css' />" rel="stylesheet"></link>
+<script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
+<link href="<c:url value='/resources/css/bootstrap.min.css' />" rel="stylesheet"></link>
+<script src="<c:url value='/resources/js/bootstrap.min.js' />"></script>
+<link href="<c:url value='/resources/css/bootstrap-editable.css' />" rel="stylesheet"></link>
 <script src="<c:url value='/resources/js/bootstrap-editable.js' />"></script>
 <script>
 function validateEmail(email) 

@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ import com.dc.ehs.helper.EhsHelper;
 
 /**
  * Main controller for entire application.
+ * 
  * @author Deepak Chaudhary
  *
  */
@@ -43,10 +45,15 @@ public class ApplicationController
 	@Autowired
 	EhsHelper					ehsHelper;
 	
+	/** path to download docs from server **/
+	@Value( "${app.doc_path}" )
+	String						doc_path;
+	
 	private static final Logger	LOGGER	= Logger.getLogger( ApplicationController.class );
 	
 	/**
 	 * This path loads home page.
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -60,6 +67,7 @@ public class ApplicationController
 	
 	/**
 	 * This path loads all observations for managing purposes/
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -75,6 +83,7 @@ public class ApplicationController
 	
 	/**
 	 * This path downloads a user file.
+	 * 
 	 * @param fileName
 	 * @return
 	 * @throws IOException
@@ -83,7 +92,7 @@ public class ApplicationController
 	public ResponseEntity< InputStreamResource > downloadFile ( @RequestParam( "filename" ) String fileName )
 	        throws IOException
 	{
-		String filePath = "/home/ec2-user/tools/docs/" + fileName;
+		String filePath = doc_path + fileName;
 		File file = new File( filePath );
 		InputStreamResource resource = new InputStreamResource( new FileInputStream( file ) );
 		
@@ -92,7 +101,9 @@ public class ApplicationController
 	}
 	
 	/**
-	 * This path sets status / uploads document for a observation - assigned status.
+	 * This path sets status / uploads document for a observation - assigned
+	 * status.
+	 * 
 	 * @param model
 	 * @param observation
 	 * @return
@@ -110,7 +121,9 @@ public class ApplicationController
 	}
 	
 	/**
-	 * This path sets status / uploads document for a observation - in-progress status.
+	 * This path sets status / uploads document for a observation - in-progress
+	 * status.
+	 * 
 	 * @param model
 	 * @param observation
 	 * @return
@@ -128,6 +141,7 @@ public class ApplicationController
 	
 	/**
 	 * This path loads observation for action by user.
+	 * 
 	 * @param obsId
 	 * @param model
 	 * @return
@@ -159,6 +173,7 @@ public class ApplicationController
 	
 	/**
 	 * This path presents create new observation page to ADMIN users.
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -187,7 +202,9 @@ public class ApplicationController
 	}
 	
 	/**
-	 * This action creates new observation in database and redirects traffic to load the observation.
+	 * This action creates new observation in database and redirects traffic to
+	 * load the observation.
+	 * 
 	 * @param observation
 	 * @param model
 	 * @return
@@ -227,6 +244,7 @@ public class ApplicationController
 	
 	/**
 	 * This path loads an observation for editing.
+	 * 
 	 * @param obsId
 	 * @param model
 	 * @return
@@ -263,7 +281,9 @@ public class ApplicationController
 	}
 	
 	/**
-	 * This path updates the observation and redirects traffic to load saved observation.
+	 * This path updates the observation and redirects traffic to load saved
+	 * observation.
+	 * 
 	 * @param observation
 	 * @param model
 	 * @return
@@ -319,6 +339,7 @@ public class ApplicationController
 	
 	/**
 	 * This path presents user management screen.
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -334,6 +355,7 @@ public class ApplicationController
 	
 	/**
 	 * This path saves user updates in database.
+	 * 
 	 * @param formParams
 	 * @param type
 	 * @return
@@ -379,6 +401,7 @@ public class ApplicationController
 	
 	/**
 	 * This path creates a new user in database.
+	 * 
 	 * @param formParams
 	 * @return
 	 */
@@ -408,6 +431,7 @@ public class ApplicationController
 	
 	/**
 	 * This path deletes user from database.
+	 * 
 	 * @param users
 	 * @return
 	 */
@@ -432,6 +456,7 @@ public class ApplicationController
 	
 	/**
 	 * This path loads metadata management screen.
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -446,6 +471,7 @@ public class ApplicationController
 	
 	/**
 	 * This path saves metadata changes into the database.
+	 * 
 	 * @param formParams
 	 * @return
 	 */
@@ -484,6 +510,7 @@ public class ApplicationController
 	
 	/**
 	 * This path creates new metadata line items.
+	 * 
 	 * @param value
 	 * @param type
 	 * @return
@@ -510,6 +537,7 @@ public class ApplicationController
 	
 	/**
 	 * This path delets metadata from database.
+	 * 
 	 * @param metadata
 	 * @return
 	 */

@@ -5,9 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>EHS Login page</title>
-<link
-	href="<c:url value='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />"
-	rel="stylesheet"></link>
+<link href="<c:url value='/resources/css/font-awesome.min.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/resources/css/bootstrap.min.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 </head>

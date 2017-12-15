@@ -1,7 +1,6 @@
 package com.dc.ehs.common;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,13 +62,6 @@ public class EmailService
 			throws MessagingException
 	{
 
-		/*
-		 * MimeMessage message = mailSender.createMimeMessage();
-		 * 
-		 * message.setSubject(subject); MimeMessageHelper helper; helper = new
-		 * MimeMessageHelper(message, true); helper.setFrom(from); helper.setTo(to);
-		 * helper.setText(msg, true); mailSender.send(message);
-		 */
 		MimeMessagePreparator preparator = new MimeMessagePreparator()
 		{
 			@SuppressWarnings(

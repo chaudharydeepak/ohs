@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,6 +49,10 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 
 	@Autowired
 	EmailService emailService;
+	
+	
+	@Value("${app.doc_path}")
+	String doc_path;
 
 	/*
 	 * (non-Javadoc)
@@ -57,6 +62,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	 */
 	public int saveObservation(Observation observation) throws MessagingException, ParseException
 	{
+		System.out.println( doc_path );
 		int obs_id = 0;
 		int actionNumber = 0;
 		int attachNumber = 0;
@@ -132,7 +138,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 				attachNumber = attachNumber + 1;
 				String insertSQLAttachment = "insert into APP.ObservationAttachmnts values(" + obs_id + ","
 						+ attachNumber + "," + "'File'" + ",'" + observation.getFile().getOriginalFilename() + "',"
-						+ "'/home/ec2-user/tools/docs'" + ")";
+						+ "'" + doc_path + "'" + ")";
 				jdbcTemplate.update(insertSQLAttachment);
 			}
 
@@ -148,9 +154,9 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters,
 					String.class);
 
-			emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail,
+			/*emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail,
 					"Observation assigned for your action/" + observation.getClassification() + "/" + obs_id,
-					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);
+					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);*/
 
 		} else
 		{
@@ -209,7 +215,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 
 				String insertSQLAttachment = "insert into APP.ObservationAttachmnts values(" + obs_id + ","
 						+ currentAttchID + "," + "'File'" + ",'" + observation.getFile().getOriginalFilename() + "',"
-						+ "'/home/ec2-user/tools/docs'" + ")";
+						+ "'" + doc_path + "'" + ")";
 
 				jdbcTemplate.update(insertSQLAttachment);
 			}

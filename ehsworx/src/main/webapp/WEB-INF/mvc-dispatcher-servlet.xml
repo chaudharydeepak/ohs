@@ -11,13 +11,29 @@
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
 		">
 
 	<!-- mvc-dispatcher-servlet should contain configs relevant to Spring MVC. -->
 
+	<!-- lets first load properties file. -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:/app.properties</value>
+		</property>
+	</bean>
+	
+	<!-- initialize transaction manager to maintain atomicity of DB transactions. -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
 	<!-- Force both annotation / mvc resources mappings. -->
 	<mvc:annotation-driven />
-	<security:global-method-security secured-annotations="enabled"/>	
+	
+	<!-- enfore method level security. -->
+	<security:global-method-security
+		secured-annotations="enabled" />
 
 	<!-- Base Scan. -->
 	<context:component-scan base-package="com.dc.ehs.controller" />
@@ -25,6 +41,17 @@
 	<context:component-scan base-package="com.dc.ehs.service" />
 	<context:component-scan base-package="com.dc.ehs.dao" />
 
+	<!-- Initialization for data source. -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize">
+			<value>8</value>
+		</property>
+	</bean>
+	
 	<!-- Internal View Resolver. -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -36,7 +63,6 @@
 		</property>
 	</bean>
 
-
 	<!-- Resolver for uploading files. -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -47,7 +73,19 @@
 	<mvc:resources mapping="/resources/**" location="/resources/web_theme/" />
 	<mvc:resources mapping="/static/**" location="/resources/apidocs/" />
 
-
-
+	<!-- Initialize services -->
+	<bean id="ehsHelper" class="com.dc.ehs.helper.EhsHelper" />
+	<bean id="manageUserService" class="com.dc.ehs.service.ManageUserServiceImpl" />
+	<bean id="manageUserDAO" class="com.dc.ehs.dao.ManageUserDAOImpl" />
+	<bean id="loadmetaDataService" class="com.dc.ehs.service.LoadObservationMetadataServiceImpl" />
+	<bean id="loadMetadao" class="com.dc.ehs.dao.LoadMetadataDAOImpl" />
+	<bean id="obsCRUDService" class="com.dc.ehs.service.ObservationCRUDServiceImpl" />
+	<bean id="obsCRUDdao" class="com.dc.ehs.dao.ObservationCRUDDAOImpl" />
+	<bean id="utilMethods" class="com.dc.ehs.util.EhsUtilityMethods" />
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 </beans>

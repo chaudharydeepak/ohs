@@ -7,14 +7,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>EHS Observation</title>
-<link href="<c:url value='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />" rel="stylesheet"></link>
+<link href="<c:url value='/resources/css/font-awesome.min.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/resources/css/bootstrap.min.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/resources/css/font-awesome.min.css' />" rel="stylesheet"></link>
-<script src="<c:url value="https://code.jquery.com/jquery-1.11.3.min.js" />"></script>
+<script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
 <script src="<c:url value="/resources/js/validator.min.js" />"></script>
-<script src="<c:url value="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js" />"></script>
-<link href="<c:url value='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css' />" rel="stylesheet"></link>
+<script src="<c:url value='/resources/js/bootstrap-datepicker.min.js' />"></script>
+<link href="<c:url value='/resources/css/bootstrap-datepicker3.css' />" rel="stylesheet"></link>
 <script>
     $(document).ready(function(){
       var date_input=$('input[name="date"]'); //our date input has the name "date"

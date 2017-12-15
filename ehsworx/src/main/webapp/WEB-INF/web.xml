@@ -1,7 +1,4 @@
-<web-app id="WebApp_ID" version="2.4"
-	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
-	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<web-app version="3.0">
 	<display-name>Archetype Created Web Application</display-name>
 
 	<!-- Configure Spring MVC Servlet -->
@@ -22,7 +19,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value> 
-		/WEB-INF/applicationContext.xml /WEB-INF/spring-security.xml /WEB-INF/spring-mail.xml</param-value>
+		/WEB-INF/applicationContext.xml /WEB-INF/mvc-dispatcher-servlet.xml /WEB-INF/spring-security.xml /WEB-INF/spring-mail.xml</param-value>
 	</context-param>
 
 	<!-- Integrate Spring Security[Secure every URL] -->
@@ -40,8 +37,17 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
+	<!--  <error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/error</location>
+	</error-page>-->
+	
 	<error-page>
 		<error-code>403</error-code>
 		<location>/accessDenied</location>
+	</error-page>
+
+	<error-page>
+    	<location>/errors</location>
 	</error-page>
 </web-app>

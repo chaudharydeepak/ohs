@@ -4,8 +4,6 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security.xsd">
-
-	<global-method-security secured-annotations="enabled"/>
 	
 	<!-- We do not want to apply any security on resources access. -->
 	<http pattern="/resources/**" security="none" />
@@ -13,7 +11,6 @@
 	<http auto-config="true">
 		<access-denied-handler error-page="/403"/>
 		<intercept-url pattern="/" access="permitAll" />
-		<intercept-url pattern="/welcome/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/welcome/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/welcome/**" access="hasRole('ROLE_NORMAL') or hasRole('ROLE_ADMIN')" />
 		<form-login login-page='/login' 
@@ -41,9 +38,5 @@
 	</authentication-manager>
 	
 	 <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
-
-
-
 
 </beans:beans>
