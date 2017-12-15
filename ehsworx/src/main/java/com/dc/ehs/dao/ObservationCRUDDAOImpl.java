@@ -49,10 +49,12 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 
 	@Autowired
 	EmailService emailService;
-	
-	
+
 	@Value("${app.doc_path}")
 	String doc_path;
+
+	@Value("${email.username}")
+	String frm_email;
 
 	/*
 	 * (non-Javadoc)
@@ -62,7 +64,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	 */
 	public int saveObservation(Observation observation) throws MessagingException, ParseException
 	{
-		System.out.println( doc_path );
+		System.out.println(doc_path);
 		int obs_id = 0;
 		int actionNumber = 0;
 		int attachNumber = 0;
@@ -154,9 +156,9 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters,
 					String.class);
 
-			/*emailService.sendMail("chaudharydeepak08@gmail.com", respManagerEmail,
+			emailService.sendMail(frm_email, respManagerEmail,
 					"Observation assigned for your action/" + observation.getClassification() + "/" + obs_id,
-					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);*/
+					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);
 
 		} else
 		{

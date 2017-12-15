@@ -76,6 +76,8 @@ table th {
 </style>
 </head>
 <body>
+<div style="text-color:red;"><b>****** This software is in beta version. For demo purposes only.*****</b></div>
+<br>
 Dear ${respManagerName},
 <br><br>
 New observation is assigned for your action. Please access below:

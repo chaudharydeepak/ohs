@@ -10,8 +10,10 @@
 <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 </head>
 <body>
+	<div class="alert alert-warning" style="margin: 0 auto;width:850px;text-align:center;">
+		<b>****** This software is in beta version. For demo purposes only.*****</b>
+	</div>
 	<div class="wrapper">
-
 		<form action="j_spring_security_check" method="post" class="form-signin">
 			<p style="text-align:center"><img style="text-align:center;width: auto; height: auto;max-width: 100%;max-height: 100%>" src="<c:url value='/resources/img/logo-cover.png'/>"></img></p>
 			<c:if test="${not empty error}">

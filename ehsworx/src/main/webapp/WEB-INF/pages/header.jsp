@@ -29,4 +29,8 @@
     			</form>
     			<a href="#" style="color:gray;font-size:10px;" onclick="document.getElementById('logout').submit();"><i class="fa fa-power-off" aria-hidden="true" style="font-size:13px;color:yellow"></i></a>
       </div>
+      
 </nav>
+<div class="alert alert-warning" style="margin: 0 auto;width:850px;text-align:center;">
+		<b>****** This software is in beta version. For demo purposes only.*****</b>
+	</div>
