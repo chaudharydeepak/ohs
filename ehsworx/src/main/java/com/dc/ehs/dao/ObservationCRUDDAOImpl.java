@@ -57,7 +57,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	String frm_email;
 
 	/*
-	 * (non-Javadoc)
+	 * This method creates or updates an observation.
 	 * 
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#saveObservation(com.dc.ehs.entity.
 	 * Observation)
@@ -70,64 +70,67 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 		int attachNumber = 0;
 		String _SQL = "";
 		Map<String, Object> namedParameters;
+		Map<String, Object> insrtNamedParameters;
+
 		if (observation.getOperationType().equalsIgnoreCase("new"))
 		{
 			LOGGER.info("-----" + observation.getInitiatedBy());
 			String fetchObsNm = "select t from ( values next value for app.observation_number_id ) s( t) ";
 			obs_id = jdbcTemplate.queryForObject(fetchObsNm, Integer.class);
-			_SQL = "insert into app.ObservationMaster ( obs_id, \n" + "status,\n" + "active,\n" + "reference,  \n"
-					+ "location, \n" + "department, \n" + "observrType, \n" + "behalfOf,\n" + "contact_info, \n"
-					+ "shoc, \n" + "classification, \n" + "obsTxt,\n" + "respMgr, \n" + "initiatedBy, \n"
-					+ "creatd_dt, \n" + "creatd_by, obs_date, project, area) values (" + obs_id + ",\n" + "'Assigned'"
-					+ ",\n" + "'true'" + ",\n" + "'" + observation.getObsRef() + "',\n" + "'"
-					+ observation.getLocations() + "',\n" + "'" + observation.getDepartments() + "',\n" + "'"
-					+ observation.getWhobsvd() + "',\n" + "'" + observation.getObsBehf() + "',\n" + "'"
-					+ observation.getObsContctInfo() + "',\n" + "'" + observation.getShoc() + "',\n" + "'"
-					+ observation.getClassification() + "',\n" + "'" + observation.getObsTxt() + "',\n" + "'"
-					+ observation.getResponsibleManager() + "',\n" + "'" + observation.getInitiatedBy()
-					+ "', CURRENT_DATE ,\n" + "'" + observation.getInitiatedBy() + "','" + observation.getDate() + "','"
-					+ observation.getProject() + "','" + observation.getAreas() + "')";
 
-			jdbcTemplate.update(_SQL);
+			_SQL = "insert into app.ObservationMaster ( obs_id, status, active, reference, location, department, observrType, behalfOf, contact_info, shoc, "
+					+ "classification, obsTxt, respMgr, initiatedBy, creatd_dt,creatd_by, obs_date, project, area) values ( :obs_id, :status, :activeflg, :ref,"
+					+ ":locat, :dept, :obtyp, :bhfof, :cntct, :shoc, :class, :obsTxt, :respMgr, :initby, CURRENT_DATE, :initby, :obsDate, :prj, :area )";
+
+			insrtNamedParameters = new HashMap<String, Object>();
+			insrtNamedParameters.put("obs_id", obs_id);
+			insrtNamedParameters.put("status", "Assigned");
+			insrtNamedParameters.put("activeflg", "true");
+			insrtNamedParameters.put("ref", observation.getObsRef());
+			insrtNamedParameters.put("locat", observation.getLocations());
+			insrtNamedParameters.put("dept", observation.getDepartments());
+			insrtNamedParameters.put("obtyp", observation.getWhobsvd());
+			insrtNamedParameters.put("bhfof", observation.getObsBehf());
+			insrtNamedParameters.put("cntct", observation.getObsContctInfo());
+			insrtNamedParameters.put("shoc", observation.getShoc());
+			insrtNamedParameters.put("class", observation.getClassification());
+			insrtNamedParameters.put("obsTxt", observation.getObsTxt());
+			insrtNamedParameters.put("respMgr", observation.getResponsibleManager());
+			insrtNamedParameters.put("initby", observation.getInitiatedBy());
+			insrtNamedParameters.put("obsDate", observation.getDate());
+			insrtNamedParameters.put("prj", observation.getProject());
+			insrtNamedParameters.put("area", observation.getAreas());
+
+			namedParameterJdbcTemplate.update(_SQL, insrtNamedParameters);
 
 			if (null != observation.getPropsdAction() && observation.getPropsdAction().trim().length() > 0)
 			{
 				actionNumber = actionNumber + 1;
-				String insertSQLAction = "insert into APP.ObservationActions values(" + obs_id + "," + actionNumber
-						+ "," + "'" + observation.getPropsdAction().trim() + "')";
-				jdbcTemplate.update(insertSQLAction);
+				inserAction(obs_id, actionNumber, observation.getPropsdAction().trim());
 			}
 
 			if (null != observation.getPropsdAction_2() && observation.getPropsdAction_2().trim().length() > 0)
 			{
 				actionNumber = actionNumber + 1;
-				String insertSQLAction = "insert into APP.ObservationActions values(" + obs_id + "," + actionNumber
-						+ "," + "'" + observation.getPropsdAction_2().trim() + "')";
-				jdbcTemplate.update(insertSQLAction);
+				inserAction(obs_id, actionNumber, observation.getPropsdAction_2().trim());
 			}
 
 			if (null != observation.getPropsdAction_3() && observation.getPropsdAction_3().trim().length() > 0)
 			{
 				actionNumber = actionNumber + 1;
-				String insertSQLAction = "insert into APP.ObservationActions values(" + obs_id + "," + actionNumber
-						+ "," + "'" + observation.getPropsdAction_3().trim() + "')";
-				jdbcTemplate.update(insertSQLAction);
+				inserAction(obs_id, actionNumber, observation.getPropsdAction_3().trim());
 			}
 
 			if (null != observation.getPropsdAction_4() && observation.getPropsdAction_4().trim().length() > 0)
 			{
 				actionNumber = actionNumber + 1;
-				String insertSQLAction = "insert into APP.ObservationActions values(" + obs_id + "," + actionNumber
-						+ "," + "'" + observation.getPropsdAction_4().trim() + "')";
-				jdbcTemplate.update(insertSQLAction);
+				inserAction(obs_id, actionNumber, observation.getPropsdAction_4().trim());
 			}
 
 			if (null != observation.getPropsdAction_5() && observation.getPropsdAction_5().trim().length() > 0)
 			{
 				actionNumber = actionNumber + 1;
-				String insertSQLAction = "insert into APP.ObservationActions values(" + obs_id + "," + actionNumber
-						+ "," + "'" + observation.getPropsdAction_5().trim() + "')";
-				jdbcTemplate.update(insertSQLAction);
+				inserAction(obs_id, actionNumber, observation.getPropsdAction_5().trim());
 			}
 
 			MultipartFile multipartFile = observation.getFile();
@@ -138,10 +141,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 					&& !multipartFile.getOriginalFilename().trim().isEmpty())
 			{
 				attachNumber = attachNumber + 1;
-				String insertSQLAttachment = "insert into APP.ObservationAttachmnts values(" + obs_id + ","
-						+ attachNumber + "," + "'File'" + ",'" + observation.getFile().getOriginalFilename() + "',"
-						+ "'" + doc_path + "'" + ")";
-				jdbcTemplate.update(insertSQLAttachment);
+				insertAttachmnt(obs_id, attachNumber, observation.getFile().getOriginalFilename());
 			}
 
 			/* Lets send email */
@@ -156,9 +156,12 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			String initiatorName = namedParameterJdbcTemplate.queryForObject(fetchInitiatorName, namedParameters,
 					String.class);
 
-			emailService.sendMail(frm_email, respManagerEmail,
-					"Observation assigned for your action/" + observation.getClassification() + "/" + obs_id,
-					observation, observation.getFile().getOriginalFilename(), obs_id, initiatorName, respManagerName);
+			/*
+			 * emailService.sendMail(frm_email, respManagerEmail, ehsConstants. +
+			 * observation.getClassification() + "/" + obs_id, observation,
+			 * observation.getFile().getOriginalFilename(), obs_id, initiatorName,
+			 * respManagerName);
+			 */
 
 		} else
 		{
@@ -214,19 +217,14 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 						Integer.class);
 				currentAttchID = currentAttchID + 1;
 				LOGGER.info("currentAttchID " + currentAttchID);
-
-				String insertSQLAttachment = "insert into APP.ObservationAttachmnts values(" + obs_id + ","
-						+ currentAttchID + "," + "'File'" + ",'" + observation.getFile().getOriginalFilename() + "',"
-						+ "'" + doc_path + "'" + ")";
-
-				jdbcTemplate.update(insertSQLAttachment);
+				insertAttachmnt(obs_id, currentAttchID, observation.getFile().getOriginalFilename());
 			}
 		}
 		return obs_id;
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * This method loads a particular observation.
 	 * 
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#loadObservation(int)
 	 */
@@ -277,7 +275,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * This method loads all observation for a user.
 	 * 
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#loadAllObservations()
 	 */
@@ -307,17 +305,6 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 
 				if (null != actionList && !actionList.isEmpty())
 					item.setActionsList(actionList);
-
-				/*
-				 * fetch attacments String fetchAttach =
-				 * "Select * from app.ObservationAttachmnts where obs_id=:obsid";
-				 * List<Attachment> attachList = namedParameterJdbcTemplate.query(fetchAttach,
-				 * namedParameters, new AttachmentMapper());
-				 * 
-				 * if (null != attachList && !attachList.isEmpty()) {
-				 * LOGGER.info("##################setting attachment --> " + attachList.size());
-				 * item.setAttachList(attachList); }
-				 */
 			}
 		});
 		return obsList;
@@ -344,7 +331,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * This method sets status on a given observation.
 	 * 
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#setStatusOnObservation(int,
 	 * java.lang.String, java.lang.String, java.lang.String,
@@ -378,8 +365,8 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 			LOGGER.info("currentAttchID " + currentAttchID);
 
 			String insertSQLAttachment = "insert into APP.ObservationAttachmnts values(" + observationId + ","
-					+ currentAttchID + "," + "'File'" + ",'" + _multipartFile.getOriginalFilename() + "',"
-					+ "'/Users/deepakchaudhary/dc_consulting/EHS/uploaded_docs/'" + ")";
+					+ currentAttchID + "," + "'File'" + ",'" + _multipartFile.getOriginalFilename() + "'," + "'"
+					+ doc_path + "'" + ")";
 
 			jdbcTemplate.update(insertSQLAttachment);
 		}
@@ -388,7 +375,7 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * This method deletes a given observation.
 	 * 
 	 * @see com.dc.ehs.dao.ObservationCRUDDAO#deleteObservation(int,
 	 * java.lang.String)
@@ -405,7 +392,9 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	}
 
 	/**
+	 * This method fetched responsible manager for an observation.
 	 * 
+	 * @param obsID
 	 */
 	@Override
 	public String fetchRespManagerForObs(int obsID)
@@ -417,7 +406,9 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 	}
 
 	/**
+	 * This method fetch status for an observation.
 	 * 
+	 * @param obsID
 	 */
 	@Override
 	public String fetchStatusForObs(int obsID)
@@ -426,5 +417,42 @@ public class ObservationCRUDDAOImpl implements ObservationCRUDDAO
 		Map<String, Object> namedParameters = new HashMap<String, Object>();
 		namedParameters.put("obsID", obsID);
 		return namedParameterJdbcTemplate.queryForObject(_SQL, namedParameters, String.class);
+	}
+
+	/**
+	 * This method inserts actions for an observation.
+	 * 
+	 * @param obs_id
+	 * @param actionNumber
+	 * @param actionTxt
+	 */
+	public void inserAction(int obs_id, int actionNumber, String actionTxt)
+	{
+		LOGGER.info(" --->  " + obs_id + " " + actionNumber + " " + actionTxt);
+		String insertSQLAction = "insert into APP.ObservationActions (obs_id, action_id, action_txt ) values ( :obs_id, :actionNumber , :actionTxt )";
+		Map<String, Object> ationNamedParameters = new HashMap<String, Object>();
+		ationNamedParameters.put("obs_id", obs_id);
+		ationNamedParameters.put("actionNumber", actionNumber);
+		ationNamedParameters.put("actionTxt", actionTxt);
+		namedParameterJdbcTemplate.update(insertSQLAction, ationNamedParameters);
+	}
+
+	/**
+	 * This method inserts attachement for an observation.
+	 * 
+	 * @param obs_id
+	 * @param attachNumber
+	 * @param fileName
+	 */
+	public void insertAttachmnt(int obs_id, int attachNumber, String fileName)
+	{
+		String insertSQLAttachment = "insert into APP.ObservationAttachmnts values( :obs_id ,  :attachNumber,  :file , :fileName, :doc_path)";
+		Map<String, Object> attchmntNamedParameters = new HashMap<String, Object>();
+		attchmntNamedParameters.put("obs_id", obs_id);
+		attchmntNamedParameters.put("attachNumber", attachNumber);
+		attchmntNamedParameters.put("file", "File");
+		attchmntNamedParameters.put("fileName", fileName);
+		attchmntNamedParameters.put("doc_path", doc_path);
+		namedParameterJdbcTemplate.update(insertSQLAttachment, attchmntNamedParameters);
 	}
 }
