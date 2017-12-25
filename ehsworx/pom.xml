@@ -14,8 +14,9 @@
 		<jstl.version>1.2</jstl.version>
 		<project.name>OEHS System</project.name>
 		<project.version>1.0</project.version>
-	  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tomcat.version>7.0.82</tomcat.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -171,10 +172,8 @@
 					<server>TomcatServer</server>
 					<path>/ehsworx</path>
 				</configuration>
-				<!--<configuration> 
-					<url>http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/manager/text</url> 
-					<server>awsTomcatServer</server> <path>/ehsworx</path>
-				</configuration>  -->
+				<!--<configuration> <url>http://ec2-34-201-58-201.compute-1.amazonaws.com:8080/manager/text</url> 
+					<server>awsTomcatServer</server> <path>/ehsworx</path> </configuration> -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

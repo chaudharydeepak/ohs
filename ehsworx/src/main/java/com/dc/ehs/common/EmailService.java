@@ -70,7 +70,6 @@ public class EmailService
 			{
 				MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 				message.setTo(to);
-				message.setBcc("chaudharydeepak08@gmail.com");
 				message.setFrom(from);
 				message.setSubject(subject);
 				message.setSentDate(new Date());
@@ -91,5 +90,64 @@ public class EmailService
 			}
 		};
 		mailSender.send(preparator);
+	}
+
+	public void sendMail(String frm_email, String username, String velocityTemplt, String subject, String token, String toFullName)
+	{
+		MimeMessagePreparator preparator = new MimeMessagePreparator()
+		{
+			@SuppressWarnings(
+			{ "rawtypes", "unchecked" })
+			public void prepare(MimeMessage mimeMessage) throws Exception
+			{
+				MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+				message.setTo(username);
+				message.setFrom(frm_email);
+				message.setSubject(subject);
+				message.setSentDate(new Date());
+				
+				FileSystemResource res = new FileSystemResource(new File("/resources/img/logo-cover.png"));
+				
+				Map model = new HashMap();
+				model.put("logo", res);
+				model.put("token", token);
+				model.put("toFullName", toFullName);
+				model.put("email", username);
+				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
+						velocityTemplt, "UTF-8", model);
+				message.setText(text, true);
+			}
+		};
+		mailSender.send(preparator);
+		
+	}
+
+	public void sendMail(String frm_email, String username, String velocityTemplt, String subject, String toFullName)
+	{
+		MimeMessagePreparator preparator = new MimeMessagePreparator()
+		{
+			@SuppressWarnings(
+			{ "rawtypes", "unchecked" })
+			public void prepare(MimeMessage mimeMessage) throws Exception
+			{
+				MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+				message.setTo(username);
+				message.setFrom(frm_email);
+				message.setSubject(subject);
+				message.setSentDate(new Date());
+				
+				FileSystemResource res = new FileSystemResource(new File("/resources/img/logo-cover.png"));
+				
+				Map model = new HashMap();
+				model.put("logo", res);
+				model.put("toFullName", toFullName);
+				model.put("email", username);
+				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
+						velocityTemplt, "UTF-8", model);
+				message.setText(text, true);
+			}
+		};
+		mailSender.send(preparator);
+		
 	}
 }

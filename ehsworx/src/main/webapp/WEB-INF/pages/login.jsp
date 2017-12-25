@@ -22,12 +22,6 @@
 			<c:if test="${not empty msg}">
 				<div class="alert alert-success">${msg}</div>
 			</c:if>
-			<!--
-			<input type="text" class="form-control" name="username"
-				placeholder="Email Address" />
-			<input type="password" class="form-control" name="password"
-				placeholder="Password" />
-			-->
 			<div class="input-group margin-bottom-sm">
 	  		<span class="input-group-addon"><i class="fa fa-envelope-o fa-fw" style="color:green"></i></span>
 				<input type="text" class="form-control" name="username" placeholder="Email Address" />
@@ -38,7 +32,9 @@
 			</div>
 
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			<button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color:green;">Login</button>
+			<button class="btn btn-block" type="submit" style="background-color:green;color:white;">Login</button>
+			<br>
+			<a href="/ehsworx/welcome/resetPasswordLink" style="font-size:12px;color:green">Forgot Password?<i class="fa fa-key fa-fw" style="color:green"></i></a>
 		</form>
 	</div>
 </body>

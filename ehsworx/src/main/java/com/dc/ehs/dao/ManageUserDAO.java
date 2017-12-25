@@ -28,6 +28,12 @@ public interface ManageUserDAO
 	 */
 	public List< User > loadUsers ( String username );
 	
+	public boolean userExist( String username );
+	
+	public void createPasswordResetTokenForUser(String username, String token);
+	
+	public String validatePasswordResetToken( String username, String token);
+	
 	/**
 	 * interface method to save a user into the system.
 	 * 

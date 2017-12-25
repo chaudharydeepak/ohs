@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
@@ -31,6 +36,7 @@ import com.dc.ehs.common.EHSConstants;
 import com.dc.ehs.entity.Actions;
 import com.dc.ehs.entity.Observation;
 import com.dc.ehs.helper.EhsHelper;
+import com.dc.ehs.util.EhsUtilityMethods;
 
 /**
  * Main controller for entire application.
@@ -44,6 +50,9 @@ public class ApplicationController
 {
 	@Autowired
 	EhsHelper ehsHelper;
+
+	@Autowired
+	EhsUtilityMethods utilMethods;
 
 	/** path to download docs from server **/
 	@Value("${app.doc_path}")
@@ -571,4 +580,58 @@ public class ApplicationController
 		}
 		return new ResponseEntity<String>(responseHeaders, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/resetPasswordLink", method = RequestMethod.GET)
+	public ModelAndView loadPwdRst()
+	{
+		LOGGER.info("invoked loadPwdRst: ");
+		ModelAndView model = new ModelAndView();
+		model.addObject("msg", "Enter your email below:");
+		model.setViewName("resetPassword");
+		return model;
+	}
+
+	@RequestMapping(value = "/generateResetPswdToken", method = RequestMethod.POST)
+	public ModelAndView genPwdToken(@RequestParam(value = "email", required = true) String email)
+	{
+		LOGGER.info("invoked generateResetPswdToken: " + email);
+		String respMessage = ehsHelper.resetPswdHelper(email);
+		ModelAndView model = new ModelAndView();
+		model.addObject("msg", respMessage);
+		model.setViewName("resetPassword");
+		return model;
+	}
+
+	@RequestMapping(value = "/processPswdToken")
+	public String processPswdToken(@RequestParam(value = "token", required = true) final String token,
+			@RequestParam(value = "email", required = true) String username)
+	{
+		LOGGER.info("invoked processPswdToken: ");
+		String respMessage = ehsHelper.processPswdToken(username, token);
+		if (respMessage != null && respMessage.trim().equalsIgnoreCase("OK"))
+		{
+			return "redirect:/updatePassword";
+		}
+		return "redirect:/login?invalidToken";
+	}
+
+	@RequestMapping(value = "/resetPswd")
+	public String resetUserPswd(@RequestParam(value = "inputPasswordConfirm", required = true) String password_1,
+			HttpServletRequest request, HttpServletResponse response)
+	{
+		LOGGER.info("invoked processPswdToken: ");
+		String respMessage = ehsHelper.saveUser(utilMethods.getLoggedInUser(), "pswd", password_1);
+		if (respMessage != null && respMessage.trim().equalsIgnoreCase("success"))
+		{
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth != null)
+			{
+				new SecurityContextLogoutHandler().logout(request, response, auth);
+				return "redirect:/login?preset";
+			}
+		}
+
+		return "redirect:/changePassword?error=" + respMessage;
+	}
+
 }

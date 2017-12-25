@@ -33,7 +33,9 @@ public class LoginController
 	@RequestMapping( value = "/login", method = RequestMethod.GET )
 	public ModelAndView login ( @RequestParam( value = "error", required = false ) String error,
 	        @RequestParam( value = "logout", required = false ) String logout,
-	        @RequestParam( value = "unauth", required = false ) String unauth )
+	        @RequestParam( value = "unauth", required = false ) String unauth,
+	        @RequestParam( value = "preset", required = false ) String preset,
+	        @RequestParam( value = "invalidToken", required = false ) String invalidToken)
 	{
 		LOGGER.info("invoked login" + error + "--" + unauth);
 		ModelAndView model = new ModelAndView( );
@@ -54,7 +56,16 @@ public class LoginController
 			/* Customize your application logout message here. */
 			model.addObject( "error", "Authorization Failure : You are not authorized to access: " + appName );
 		}
-		
+		if ( preset != null )
+		{
+			/* Customize your application logout message here. */
+			model.addObject( "msg", "Password Reset Successfull." );
+		}
+		if ( invalidToken != null )
+		{
+			/* Customize your application logout message here. */
+			model.addObject( "error", "Token is invalid. Try resetting password again." );
+		}
 		/* Customize your application name here. */
 		model.addObject( "appName", appName );
 		
@@ -62,6 +73,12 @@ public class LoginController
 		
 		return model;
 		
+	}
+	
+	@RequestMapping( value = "/updatePassword", method = RequestMethod.GET )
+	public String updatePassword ( )
+	{
+		return "changePassword";
 	}
 }
 

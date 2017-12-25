@@ -38,7 +38,25 @@ insert into app.EHS_SECURITY_USERAUTHORITY values (
 'ROLE_ADMIN');
 
 
-delete from app.obervationsMetadata;
+create table app.usertoken ( id int not null , token varchar(500) not null , 
+username VARCHAR(200) NOT NULL , expiryDate date not null);
+
+ALTER TABLE APP.usertoken
+ADD FOREIGN KEY(username) 
+REFERENCES APP.EHS_SECURITY_USERPROFILE;
+
+ALTER TABLE APP.usertoken
+ADD expiryDate timestamp not null default current_timestamp;
+
+ALTER TABLE APP.usertoken
+ADD created_dt timestamp not null default current_timestamp;
+
+
+alter table APP.usertoken drop column expiryDate;
+alter table APP.usertoken drop column created_dt;
+
+
+delete from app.usertoken;
 
 create table app.obervationsMetadata( id int not null, meta_key varchar(100) not null, meta_value varchar(200) not null , active boolean);
 ALTER TABLE APP.obervationsMetadata
@@ -147,3 +165,11 @@ select * from app.ObservationActions
 
 
 select FIRST_NAME || ' ' || LAST_NAME  user from app.EHS_SECURITY_USERPROFILE
+
+select * from APP.usertoken
+
+update APP.usertoken set expirydate = current_timestamp + 24;
+
+values ({fn TIMESTAMPADD(SQL_TSI_HOUR, 24, CURRENT_TIMESTAMP)})
+
+Select * from app.usertoken where token='4301653b-9386-4775-956f-ae4002c7814a' and username='chaudharydeepak08@gmail.com'
